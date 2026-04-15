@@ -67,6 +67,13 @@ TEMPLATES = [
     },
 ]
 
+MQTT_BROKER = {
+    'HOST': 'ec2-32-194-170-233.compute-1.amazonaws.com',
+    'PORT': 50001,
+    'KEEPALIVE': 60,
+    'WEBSOCKET_PORT': 50002
+}
+
 WSGI_APPLICATION = 'KTALDE_site.wsgi.application'
 
 
