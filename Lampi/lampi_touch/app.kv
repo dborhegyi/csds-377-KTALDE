@@ -1,0 +1,19 @@
+#:import NoTransition kivy.uix.screenmanager.NoTransition
+#:include lampi_touch/home.kv
+#:include lampi_touch/lampi.kv
+#:include lampi_touch/waitingHost.kv
+#:include lampi_touch/puzzles.kv
+#:include lampi_touch/addLampi.kv
+
+ScreenManager:
+    transition: NoTransition()
+    HomeScreen:
+        name: 'home'
+    AddLampiScreen:
+        name: 'addlampi'
+    WaitingHostScreen:
+        name: "waitinghost"
+    LampiScreen:
+        name: 'lampi'
+    PuzzlesScreen:
+        name: 'puzzles'
