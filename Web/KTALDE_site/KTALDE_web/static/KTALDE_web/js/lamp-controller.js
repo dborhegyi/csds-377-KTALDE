@@ -32,6 +32,7 @@ const CLIENT_ID = Math.random().toString(36).substring(2) + '_web_client';
 
 //TODO: Need a CONFIG.topics.pubPuzzleState topic to pub state FROM Django TO Lampi
 //TODO: Need CONFIG.topics.timer for publishing timer state
+//TODO: Need CONFIG.topics.gameState to tell lampis what is happening with the game.
 
 /**
  * Creates the lamp controller Alpine.js component
@@ -150,6 +151,19 @@ function lampController() {
       });
     },
 
+    // ======================================================================
+    // Random Assorted Methods
+    // ======================================================================
+
+    timerTick() {
+      const intervalId = setInterval(this.sendTimerMessage.bind(this), 1000);
+    },
+
+    stopTimer() {
+      clearInterval(this.timerTick);
+      
+    },
+
     // ========================================================================
     // MQTT Message Handlers
     // ========================================================================
@@ -206,22 +220,34 @@ function lampController() {
     //Possible values: 'N', 'S', 'F', 'P
     onStateMessageArrived(payload){
       const states = payload.split(',');
+      const stateCount = states.length;
+      var solvedStates = 0;
       states.forEach(state => {
         if(state === 'N'){
           //implement Not Solved logic
+          //...is there any Not Solved logic? it's published down there...
         }
         else if(state === 'S'){
-          // implement Solved logic
+          // implement Solved 
+          solvedStates += 1;
         }
         else if(state === 'F'){
           // implement Failed Logic
+          //this doesn't have to be exploded right away quite yet :)
+          this.sendGameStateMessage('exploded');
         }
         else if(state === 'P'){
           // implement Puzzle in Progress logic
         }
 
-        this.sendStateChange(payload);
+        //if there are an equal number of solved states and total states, win condition!
+        if (solvedStates == stateCount){
+          this.sendGameStateMessage('win');
+        }
+
         //reflect state back to state topic (state ACK)
+        this.sendStateChange(payload);
+        
         
       });
     },
@@ -267,14 +293,12 @@ function lampController() {
       this.client.publish(CONFIG.topics.timer,new Date().toISOString());
     },
 
-    scheduleConfigChange() {
-      if (this.updateTimer !== null) {
-        clearTimeout(this.updateTimer);
+    //sends state of game to the lampis (started, exploded, paused, win)
+    sendGameStateMessage(state) {
+      if (!this.client || !this.mqttConnected) {
+        return;
       }
-      this.updateTimer = setTimeout(() => {
-        this.updateTimer = null;
-        this.sendConfigChange();
-      }, 100);
+      this.client.publish(CONFIG.topics.gameState, state);
     },
 
     sendStateChange(state) {
@@ -283,6 +307,16 @@ function lampController() {
       }
 
       this.client.publish(CONFIG.topics.pubPuzzleState, state);
+    },
+
+    scheduleConfigChange() {
+      if (this.updateTimer !== null) {
+        clearTimeout(this.updateTimer);
+      }
+      this.updateTimer = setTimeout(() => {
+        this.updateTimer = null;
+        this.sendConfigChange();
+      }, 100);
     },
 
     sendConfigChange() {
