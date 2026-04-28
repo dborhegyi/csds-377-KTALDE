@@ -1,0 +1,129 @@
+{% extends "KTALDE_web/base.html" %}
+{% load static %}
+
+{% block title %}LAMPI{% endblock %}
+
+{% block page_event %}LAMPI Detail{% endblock %}
+
+{% block additional_head_content %}
+  <link rel="stylesheet" type="text/css"
+         href="{% static 'KTALDE_web/css/lampi-sliders.css' %}">
+
+  <!-- Import map for ES modules - allows npm-style imports without a bundler -->
+  <script type="importmap">
+  {
+    "imports": {
+      "mqtt": "https://unpkg.com/mqtt@5.14.1/dist/mqtt.esm.js"
+    }
+  }
+  </script>
+{% endblock %}
+
+{% block content %}
+    <!-- Pass device configuration from Django to JavaScript -->
+    <script type="text/javascript">
+        window.LAMPI_CONFIG = {
+            deviceId: "{{ device.device_id }}",
+            mqtt: {
+                hostname: window.location.hostname,
+                websocketsPort: 50002
+            },
+            topics: {
+                setConfig: "devices/{{ device.device_id }}/lamp/set_config",
+                lampChanged: "devices/{{ device.device_id }}/lamp/changed",
+                lampServiceState: "devices/{{ device.device_id }}/lamp/connection/lamp_service/state",
+                lampUIState: "devices/{{ device.device_id }}/lamp/connection/lamp_ui/state"
+            }
+        };
+    </script>
+
+    <!-- Alpine.js lamp controller component -->
+    <div id="app"
+         x-cloak
+         x-data="lampController()"
+         x-init="connect()">
+
+      <!-- Disconnected overlay - shown when device is offline -->
+      <div class="overlay" x-show="!deviceConnected" x-transition>
+        <div class="overlay-content">
+          <h2>Device Disconnected</h2>
+          <p>This LAMPI device does not seem to be connected to the Internet.</p>
+          <p>Please make sure it is powered on and connected to the network.</p>
+        </div>
+      </div>
+
+      <!-- Top pane with sliders -->
+      <div id="top-pane">
+        <div id="sliders">
+
+          <!-- Hue slider -->
+          <input type="range"
+                 class="slider hue"
+                 min="0" max="1" step="0.01"
+                 x-model.number="hue"
+                 @input="onSliderInput('hue-slider', hue)"
+                 @mousedown="isManipulatingSlider = true"
+                 @touchstart="isManipulatingSlider = true"
+                 :style="{ '--thumb-color': hueThumbColor, '--thumb-border': hueThumbBorder }">
+
+          <!-- Saturation slider -->
+          <input type="range"
+                 class="slider saturation"
+                 min="0" max="1" step="0.01"
+                 x-model.number="saturation"
+                 @input="onSliderInput('saturation-slider', saturation)"
+                 @mousedown="isManipulatingSlider = true"
+                 @touchstart="isManipulatingSlider = true"
+                 :style="{
+                   '--saturation-end': saturationGradientEnd,
+                   '--thumb-color': saturationThumbColor,
+                   '--thumb-border': saturationThumbBorder
+                 }">
+
+          <!-- Brightness slider -->
+          <input type="range"
+                 class="slider brightness"
+                 min="0" max="1" step="0.01"
+                 x-model.number="brightness"
+                 @input="onSliderInput('brightness-slider', brightness)"
+                 @mousedown="isManipulatingSlider = true"
+                 @touchstart="isManipulatingSlider = true"
+                 :style="{ '--thumb-color': brightnessThumbColor, '--thumb-border': brightnessThumbBorder }">
+        </div>
+      </div>
+
+      <!-- Color preview box -->
+      <div id="colorbox" :style="{ backgroundColor: colorBoxColor }"></div>
+
+      <!-- Bottom pane with power button -->
+      <div id="bottom-pane">
+        <button id="power"
+                class="toggle-button"
+                @click="togglePower()"
+                :style="{ opacity: on ? 1.0 : 0.3 }">
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Global mouse/touch up handler to detect when slider manipulation ends -->
+    <script>
+      window.addEventListener('mouseup', () => {
+        if (window.Alpine && document.querySelector('[x-data]')?._x_dataStack?.[0]) {
+          document.querySelector('[x-data]')._x_dataStack[0].isManipulatingSlider = false;
+        }
+      });
+      window.addEventListener('touchend', () => {
+        if (window.Alpine && document.querySelector('[x-data]')?._x_dataStack?.[0]) {
+          document.querySelector('[x-data]')._x_dataStack[0].isManipulatingSlider = false;
+        }
+      });
+    </script>
+
+    <!-- Load the lamp controller module -->
+    <script type="module" src="{% static 'KTALDE_web/js/lamp-controller.js' %}"></script>
+
+    <!-- Alpine.js - loaded last with defer to ensure DOM is ready -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
+
+{% endblock %}
