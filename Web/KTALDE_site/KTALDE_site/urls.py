@@ -22,7 +22,7 @@ urlpatterns = [
     path('lampi/', include('KTALDE_web.urls'), name='lampi'),
     path('admin/', admin.site.urls),
     path('login/', auth_views.LoginView.as_view(
-         template_name='KTALDE_web/login.html'), name='login'),
+         template_name='KTALDE_web/startgame.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(
           template_name='KTALDE_web/logout.html'), name='logout'),
     path('', RedirectView.as_view(pattern_name='KTALDE_web:index'),

@@ -1,12 +1,12 @@
 {% extends "KTALDE_web/base.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Start Game{% endblock %}
 
 {% block content %}
-  <h2>Login</h2>
+  <h2>Start Game</h2>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Login</button>
+    <button type="submit">Start Game</button>
   </form>
 {% endblock %}
