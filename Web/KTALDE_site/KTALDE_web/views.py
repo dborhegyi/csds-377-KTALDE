@@ -4,4 +4,7 @@ from django.http import HttpResponse
 # Create your views here.
 
 def index(request):
-    return render(request, 'KTALDE_web/index.html')
+    context = {
+        'lampi_list': []
+    }
+    return render(request, 'KTALDE_web/index.html', context)
