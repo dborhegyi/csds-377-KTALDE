@@ -1,4 +1,4 @@
-{% extends "lampi_web/base.html" %}
+{% extends "KTALDE_web/base.html" %}
 {% load static %}
 
 {% block title %}LAMPI{% endblock %}
@@ -7,7 +7,7 @@
 
 {% block additional_head_content %}
   <link rel="stylesheet" type="text/css"
-         href="{% static 'lampi_web/css/lampi-sliders.css' %}">
+         href="{% static 'KTALDE_web/css/lampi-sliders.css' %}">
 
   <!-- Import map for ES modules - allows npm-style imports without a bundler -->
   <script type="importmap">
@@ -121,7 +121,7 @@
     </script>
 
     <!-- Load the lamp controller module -->
-    <script type="module" src="{% static 'lampi_web/js/lamp-controller.js' %}"></script>
+    <script type="module" src="{% static 'KTALDE_web/js/lamp-controller.js' %}"></script>
 
     <!-- Alpine.js - loaded last with defer to ensure DOM is ready -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
