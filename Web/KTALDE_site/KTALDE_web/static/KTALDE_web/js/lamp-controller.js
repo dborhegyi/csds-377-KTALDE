@@ -31,6 +31,7 @@ const CLIENT_ID = Math.random().toString(36).substring(2) + '_web_client';
 // ============================================================================
 
 //TODO: Need a CONFIG.topics.pubPuzzleState topic to pub state FROM Django TO Lampi
+//TODO: Need CONFIG.topics.timer for publishing timer state
 
 /**
  * Creates the lamp controller Alpine.js component
@@ -255,6 +256,16 @@ function lampController() {
     // ========================================================================
     // MQTT Publishing Methods
     // ========================================================================
+
+    //publish a message on timer topic (implemented every second on the actual python)
+    //process timer logic on kivy?
+    sendTimerMessage() {
+      if (!this.client || !this.mqttConnected) {
+        return;
+      }
+      
+      this.client.publish(CONFIG.topics.timer,new Date().toISOString());
+    },
 
     scheduleConfigChange() {
       if (this.updateTimer !== null) {
