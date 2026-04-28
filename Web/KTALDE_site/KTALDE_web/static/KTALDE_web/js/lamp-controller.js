@@ -30,6 +30,8 @@ const CLIENT_ID = Math.random().toString(36).substring(2) + '_web_client';
 // Alpine.js Component Definition
 // ============================================================================
 
+//TODO: Need a CONFIG.topics.pubPuzzleState topic to pub state FROM Django TO Lampi
+
 /**
  * Creates the lamp controller Alpine.js component
  */
@@ -158,6 +160,13 @@ function lampController() {
         return;
       }
 
+      //Handle when a state is published to Django
+      if (topic === CONFIG.topics.pubPuzzleState) {
+        this.onStateMessageArrived(payloadString);
+        return;
+       }
+
+
       // Parse JSON for other messages
       let payload;
       try {
@@ -190,6 +199,30 @@ function lampController() {
       this.brightness = payload.brightness;
       this.on = payload.on;
       this.hasReceivedInitialState = true;
+    },
+
+    //Takes: Array of states
+    //Possible values: 'N', 'S', 'F', 'P
+    onStateMessageArrived(payload){
+      const states = payload.split(',');
+      states.forEach(state => {
+        if(state === 'N'){
+          //implement Not Solved logic
+        }
+        else if(state === 'S'){
+          // implement Solved logic
+        }
+        else if(state === 'F'){
+          // implement Failed Logic
+        }
+        else if(state === 'P'){
+          // implement Puzzle in Progress logic
+        }
+
+        this.sendStateChange(payload);
+        //reflect state back to state topic (state ACK)
+        
+      });
     },
 
     onConnectionStateMessage(payloadString) {
@@ -231,6 +264,14 @@ function lampController() {
         this.updateTimer = null;
         this.sendConfigChange();
       }, 100);
+    },
+
+    sendStateChange(state) {
+      if (!this.client || !this.mqttConnected) {
+        return;
+      }
+
+      this.client.publish(CONFIG.topics.pubPuzzleState, state);
     },
 
     sendConfigChange() {
