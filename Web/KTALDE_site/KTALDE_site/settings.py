@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['']
 # Application definition
 
 INSTALLED_APPS = [
-    'KTALDE_web.apps.LampiWebConfig',
+    'KTALDE_web.apps.KtaldeWebConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
