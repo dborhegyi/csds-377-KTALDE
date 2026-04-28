@@ -29,7 +29,8 @@
             topics: {
               // new topics
                 gameState: "game/state",
-                pubPuzzleState: "lampi/{{ device.device_id }}/puzzleState",
+                pubPuzzleState: "lampi/{{ device.device_id }}/puzzleState/sent",
+                receivingPuzzleState: "lampi/{{ device.device_id }}/puzzleState/received",
                 timer: "game/timer",
                 // old topics
                 setConfig: "devices/{{ device.device_id }}/lamp/set_config",

@@ -176,7 +176,7 @@ function lampController() {
       }
 
       //Handle when a state is published to Django
-      if (topic === CONFIG.topics.pubPuzzleState) {
+      if (topic === CONFIG.topics.receivingPuzzleState){ 
         this.onStateMessageArrived(payloadString);
         return;
        }

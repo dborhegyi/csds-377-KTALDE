@@ -49,6 +49,8 @@ class LampiApp(App):
     _saturation = NumericProperty()
     _brightness = NumericProperty()
     lamp_is_on = BooleanProperty()
+    #uhm... idk if this is correct lol
+    current_puzzle_state: list[str] = []
 
     # moving between the screens!
     def go_to_lampi(self):
@@ -204,6 +206,25 @@ class LampiApp(App):
                                message: mqtt.MQTTMessage) -> None:
         new_state = json.loads(message.payload.decode('utf-8'))
         Clock.schedule_once(lambda dt: self._update_ui(new_state), 0.01)
+
+    
+    #Processes new puzzle state from Django
+    def receive_new_puzzle_state(self, client: Client, userdata: Any,
+                                    message: mqtt.MQTTMessage) -> None:
+            # Message is passed along as a list of strings, not json (DO NOT DECODE ANY JSON PLSSS)
+            for puzzle_state, index in enumerate(message.payload):
+                if(self.current_puzzle_state[index] != puzzle_state):
+                    if(puzzle_state == 'S'):
+                        print("INSERT PUZZLE SOLVE LOGIC IF ANY")
+                    elif(puzzle_state == 'N'):
+                        print("RESET PUZZLE LOGIC")
+                    elif(puzzle_state == 'F'):
+                        print("ERROR: Failed state received on the lampi from Django.")
+                    elif(puzzle_state == 'P'):
+                        print("PARTNER PUZZLE LOGIC HAPPENS HERE")
+                    self.current_puzzle_state[index] = puzzle_state
+
+
 
     def _update_ui(self, new_state: dict[str, Any]) -> None:
         """Update UI from MQTT state.
