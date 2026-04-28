@@ -120,7 +120,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = 'login'
+STARTGAME_REDIRECT_URL = '/'
+STARTGAME_URL = 'startgame'
 
 DEFAULT_USER = 'parked_device_user'
