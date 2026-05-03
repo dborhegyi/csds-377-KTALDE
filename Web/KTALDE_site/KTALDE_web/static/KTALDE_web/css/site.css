@@ -47,17 +47,12 @@ a, h2, label, p {
   background-size: contain;
 }
 
-.slider {
-  height: 33.33%;
-  width: 100%;
-}
-
 #outer-pane {
   min-height: 340px;
   min-width: 220px;
-  max-width: 420px;
   width: min(420px, 90vw);
   height: auto;
+  width: auto;
   padding: 12px;
   overflow: hidden;
 }
@@ -82,25 +77,6 @@ a, h2, label, p {
 #colorbox {
   background-color: #FF0000;
   height: 2.5%;
-}
-
-#power {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 27px;
-  height: 30px;
-  margin: -14px 0 0 -15px;
-  background-image: url("../images/power_icon_light.png");
-}
-
-#sliders {
-  position: relative;
-  top: 50%;
-  left: 50%;
-  height: 50%;
-  width: 75%;
-  transform: translate(-50%, -50%);
 }
 
 #labels {
