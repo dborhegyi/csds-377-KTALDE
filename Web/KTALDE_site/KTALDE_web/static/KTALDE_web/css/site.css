@@ -52,12 +52,12 @@ a, h2, label, p {
 }
 
 #outer-pane {
-  min-height: 267px;
-  min-width: 200px;
-  max-height: 320px;
-  max-width: 240px;
-  width: 240px;
-  height: 320px;
+  min-height: 340px;
+  min-width: 220px;
+  max-width: 420px;
+  width: min(420px, 90vw);
+  height: auto;
+  padding: 12px;
   overflow: hidden;
 }
 
@@ -178,6 +178,32 @@ a, h2, label, p {
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+/* Game and page containers */
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 260px;
+}
+.back-link,
+.start-link {
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  padding: 10px 16px;
+  text-decoration: none;
+}
+.back-link:hover,
+.start-link:hover {
+  background: rgba(255, 255, 255, 0.16);
 }
 
 /* Device disconnected overlay */

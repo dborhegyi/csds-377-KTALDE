@@ -2,11 +2,133 @@
 
 {% block title %}Start Game{% endblock %}
 
+{% block additional_head_content %}
+<style>
+.start-page {
+  width: min(420px, 90vw);
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.35);
+}
+.start-page h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.association-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.association-row label {
+  width: 85px;
+  font-size: 0.95rem;
+  margin-right: 0;
+}
+.association-row input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  outline: none;
+}
+.association-row button,
+.level-option,
+.start-link,
+.back-link {
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.association-row button {
+  min-width: 72px;
+}
+.association-row button:hover,
+.level-option:hover,
+.start-link:hover,
+.back-link:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+.level-select {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 24px 0 20px;
+}
+.level-option {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+}
+.level-option.selected {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: #f8f4ff;
+}
+.start-link,
+.back-link {
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
+}
+.start-container,
+.game-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.start-button-row {
+  margin-top: 10px;
+}
+</style>
+{% endblock %}
+
 {% block content %}
-  <h2>Start Game</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Start Game</button>
-  </form>
+<div class="start-page">
+  <h2>Add Puzzle Solver</h2>
+  <div class="start-container">
+    <div class="association-row">
+      <label for="code1">Player 1</label>
+      <input id="code1" type="text" placeholder="Association code">
+      <button type="button">Add</button>
+    </div>
+    <div class="association-row">
+      <label for="code2">Player 2</label>
+      <input id="code2" type="text" placeholder="Association code">
+      <button type="button">Add</button>
+    </div>
+    <div>
+      <h3 style="margin: 10px 0 10px; text-align: center;">Level Select</h3>
+      <div class="level-select" id="levelSelect">
+        <button type="button" class="level-option selected" data-level="1">01</button>
+        <button type="button" class="level-option" data-level="2">02</button>
+        <button type="button" class="level-option" data-level="3">03</button>
+        <button type="button" class="level-option" data-level="4">04</button>
+        <button type="button" class="level-option" data-level="5">05</button>
+      </div>
+    </div>
+    <div class="start-button-row">
+      <a href="{% url 'KTALDE_web:index' %}" class="start-link">START</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.level-option').forEach(button => {
+    button.addEventListener('click', () => {
+      document.querySelectorAll('.level-option').forEach(el => el.classList.remove('selected'));
+      button.classList.add('selected');
+    });
+  });
+</script>
 {% endblock %}

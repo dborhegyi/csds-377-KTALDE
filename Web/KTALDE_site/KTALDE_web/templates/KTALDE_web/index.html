@@ -1,16 +1,12 @@
 {% extends "KTALDE_web/base.html" %}
 
+{% block title %}In Game{% endblock %}
+
 {% block content %}
-
-{% if lampi_list %}
-    <ul>
-    {% for device in lampi_list %}
-       <li><a href="{% url 'KTALDE_web:detail' device.device_id %}">
-        {{ device.name }} {{device.device_id }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No devices are available.</p>
-{% endif %}
-
+<div class="game-container">
+  <div style="text-align:center; color:white; padding: 50px 0;">
+    <p style="margin:0; font-size:1.05rem;">In-game screen</p>
+  </div>
+  <a href="{% url 'startgame' %}" class="back-link">Back to Start</a>
+</div>
 {% endblock %}

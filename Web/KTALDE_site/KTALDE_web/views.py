@@ -1,26 +1,23 @@
-from typing import Any
+from typing import Any, Dict
 
-from django.db.models import QuerySet
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 
 from .models import Lampi
 
 
-class IndexView(LoginRequiredMixin, generic.ListView):
+class StartGameView(generic.TemplateView):
+    template_name = 'KTALDE_web/startgame.html'
+
+
+class IndexView(generic.TemplateView):
     template_name = 'KTALDE_web/index.html'
 
-    def get_queryset(self) -> QuerySet[Lampi]:
-        results = Lampi.objects.filter(user=self.request.user)
-        print("RESULTS: {}".format(results))
-        return results
 
-
-class DetailView(LoginRequiredMixin, generic.TemplateView):
+class DetailView(generic.TemplateView):
     template_name = 'KTALDE_web/detail.html'
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super(DetailView, self).get_context_data(**kwargs)
         context['device'] = get_object_or_404(
             Lampi, pk=kwargs['device_id'], user=self.request.user)

@@ -17,12 +17,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from django.views.generic.base import RedirectView
+from KTALDE_web import views
 
 urlpatterns = [
     path('lampi/', include('KTALDE_web.urls'), name='lampi'),
     path('admin/', admin.site.urls),
-    path('startgame/', auth_views.LoginView.as_view(
-         template_name='KTALDE_web/startgame.html'), name='startgame'),
+    path('startgame/', views.StartGameView.as_view(), name='startgame'),
     path('logout/', auth_views.LogoutView.as_view(
           template_name='KTALDE_web/logout.html'), name='logout'),
     path('', RedirectView.as_view(pattern_name='KTALDE_web:index'),
