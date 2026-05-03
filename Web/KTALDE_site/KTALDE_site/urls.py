@@ -22,5 +22,5 @@ from KTALDE_web import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('startgame/', views.StartGameView.as_view(), name='startgame'),
-    path('ingame/', include('KTALDE_web.urls')),
+    path('ingame/', views.view_pdf, name='ingame'),
 ]
