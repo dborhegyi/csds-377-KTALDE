@@ -167,7 +167,7 @@ a, h2, h3, label, p {
 }
 .back-link,
 .start-link {
-  display: inline-flex;
+  display: flex;
   justify-content: center;
   width: auto;
   border-radius: 14px;
