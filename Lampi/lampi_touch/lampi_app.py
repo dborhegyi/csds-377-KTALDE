@@ -52,7 +52,7 @@ class LampiApp(App):
     _brightness = NumericProperty()
     current_puzzle_state = ListProperty()
     PUZZLE_COUNT = 1
-    lamp_is_on = BooleanProperty()#uhm... idk if this is correct lolur
+    lamp_is_on = BooleanProperty()
     current_puzzle_state = []
 
     # moving between the screens!
@@ -192,6 +192,13 @@ class LampiApp(App):
             self.associated_status_popup.dismiss()
         else:
             self.associated_status_popup.open()
+
+#Currently unusued, DO NOT DELETE
+    def initialize_everything(self):
+        self.initialize_states()
+        #THINGS TO INITIALIZE:
+        #Puzzles
+        #Puzzle Randomization
 
     def initialize_states(self):
         self.current_puzzle_state = ['N'] * self.PUZZLE_COUNT
