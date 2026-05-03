@@ -7,6 +7,10 @@ html, body {
   font-family: 'Special Elite', cursive, sans-serif;
 }
 
+button, input, select, textarea {
+  font-family: inherit;
+}
+
 a, h2, h3, label, p {
     color: white;
 }
