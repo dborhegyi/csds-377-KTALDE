@@ -177,9 +177,8 @@ a, h2, h3, label, p {
   padding: 10px 16px;
   text-decoration: none;
 }
-.back-link:hover,
-.start-link:hover {
-  background: rgba(255, 255, 255, 0.16);
+.back-link {
+  margin: 0 auto;
 }
 
 /* Device disconnected overlay */
