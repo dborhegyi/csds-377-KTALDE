@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'pdf_view',
 ]
 
 MIDDLEWARE = [
@@ -124,7 +125,3 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'startgame'
 
 DEFAULT_USER = 'parked_device_user'
-
-INSTALLED_APPS = [
-    'pdf_view'
-]
