@@ -23,8 +23,4 @@ urlpatterns = [
     path('ingame/', include('KTALDE_web.urls'), name='ingame'),
     path('admin/', admin.site.urls),
     path('startgame/', views.StartGameView.as_view(), name='startgame'),
-    path('logout/', auth_views.LogoutView.as_view(
-          template_name='KTALDE_web/logout.html'), name='logout'),
-    path('', RedirectView.as_view(pattern_name='KTALDE_web:index'),
-         name='root'),
 ]
