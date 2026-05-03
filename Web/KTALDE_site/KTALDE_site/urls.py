@@ -19,6 +19,8 @@ from django.contrib.auth import views as auth_views
 from django.views.generic.base import RedirectView
 from KTALDE_web import views
 
+app_name = 'KTALDE_web'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('startgame/', views.StartGameView.as_view(), name='startgame'),
