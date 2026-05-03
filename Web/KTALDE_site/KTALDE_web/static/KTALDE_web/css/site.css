@@ -14,11 +14,11 @@ a, h2, label, p {
     color: red;
 }
 
-/* Flexbox page wrapper - stretches to fill the viewport */
+/* Flexbox page wrapper - centers content in viewport */
 .page-wrapper {
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     justify-content: flex-start;
     min-height: 100vh;
     gap: 10px;
@@ -49,11 +49,10 @@ a, h2, label, p {
 
 #outer-pane {
   min-height: 340px;
-  min-width: 220px;
-  width: min(420px, 90vw);
+  width: 90vw;
   height: auto;
-  width: auto;
   padding: 12px;
+  margin: 0 auto;
   overflow: hidden;
 }
 
