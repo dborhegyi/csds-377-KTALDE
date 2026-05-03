@@ -27,7 +27,7 @@ class DetailView(generic.TemplateView):
 class MyPDFView(PDFView):
     template_name = 'KTALDE_web/instructionsPDF.html'
     title = 'My PDF Document' # optional
-    filename = 'My PDF.pdf' # optional
+    filename = 'Expert Instructions.pdf' # optional
     # css_paths = [ # optional
     #     'my_pdf/css/my_pdf.css',
     # ]
