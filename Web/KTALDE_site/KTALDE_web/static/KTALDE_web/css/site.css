@@ -6,7 +6,7 @@ html, body {
   background-color: #1A1A1A;
 }
 
-a, h2, label, p {
+a, h2, h3, label, p {
     color: white;
 }
 
@@ -176,10 +176,6 @@ a, h2, label, p {
   color: white;
   padding: 10px 16px;
   text-decoration: none;
-}
-.back-link:hover,
-.start-link:hover {
-  background: rgba(255, 255, 255, 0.16);
 }
 
 /* Device disconnected overlay */
