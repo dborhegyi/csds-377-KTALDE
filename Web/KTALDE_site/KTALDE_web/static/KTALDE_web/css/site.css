@@ -6,7 +6,7 @@ html, body {
   background-color: #1A1A1A;
 }
 
-a, h2, label, p {
+a, h2, h3, label, p {
     color: white;
 }
 
@@ -169,7 +169,7 @@ a, h2, label, p {
 .start-link {
   display: inline-flex;
   justify-content: center;
-  width: 100%;
+  width: auto;
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.25);
   background: rgba(255, 255, 255, 0.08);
