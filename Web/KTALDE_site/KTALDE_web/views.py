@@ -1,8 +1,6 @@
 from typing import Any, Dict
-
 from django.views import generic
 from django.shortcuts import get_object_or_404
-from pdf_view.views import PDFView
 from .models import Lampi
 
 
@@ -23,11 +21,3 @@ class DetailView(generic.TemplateView):
             Lampi, pk=kwargs['device_id'], user=self.request.user)
         print("CONTEXT: {}".format(context))
         return context
-    
-class MyPDFView(PDFView):
-    template_name = 'KTALDE_web/instructionsPDF.html'
-    title = 'My PDF Document' # optional
-    filename = 'Expert Instructions.pdf' # optional
-    # css_paths = [ # optional
-    #     'my_pdf/css/my_pdf.css',
-    # ]
