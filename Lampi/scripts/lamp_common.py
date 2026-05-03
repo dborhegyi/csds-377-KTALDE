@@ -6,8 +6,8 @@ DEVICE_ID_FILENAME = '/sys/class/net/eth0/address'
 TOPIC_SET_LAMP_CONFIG: str = "lamp/set_config"
 TOPIC_LAMP_CHANGE_NOTIFICATION: str = "lamp/changed"
 TOPIC_LAMP_ASSOCIATED: str = "lamp/associated"
-TOPIC_OUTGOING_PUZZLE_STATE: str = "puzzleState/received"
-TOPIC_INCOMING_PUZZLE_STATE: str = "puzzleState/sent"
+TOPIC_OUTGOING_PUZZLE_STATE: str = "lampi/{{device_id}}/puzzleState/received"
+TOPIC_INCOMING_PUZZLE_STATE: str = "lampi/{{device_id}}/puzzleState/sent"
 
 def get_device_id() -> str:
     mac_addr = open(DEVICE_ID_FILENAME).read().strip()
@@ -27,5 +27,5 @@ def broker_bridge_connection_topic() -> str:
 # MQTT Broker Connection info
 MQTT_VERSION: int = paho.mqtt.client.MQTTv311
 MQTT_BROKER_HOST: str = "localhost"
-MQTT_BROKER_PORT: int = 1883
+MQTT_BROKER_PORT: int = 50002
 MQTT_BROKER_KEEP_ALIVE_SECS: int = 60

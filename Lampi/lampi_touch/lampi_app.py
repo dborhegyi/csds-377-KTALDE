@@ -5,10 +5,9 @@ from typing import Any, Optional
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.properties import NumericProperty, ColorProperty, StringProperty
+from kivy.properties import NumericProperty, AliasProperty, BooleanProperty, ColorProperty, StringProperty, ListProperty
 from lampi_touch.lamp_driver import LampDriver
 
-from kivy.properties import NumericProperty, AliasProperty, BooleanProperty
 from kivy.clock import Clock
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
@@ -26,6 +25,9 @@ MQTT_PUBLISH_THROTTLE_SECS = 0.05
 
 
 MQTT_CLIENT_ID = "lamp_ui"
+
+# TODO: New python file imported and called for specific puzzle handling :)
+
 
 class HomeScreen(Screen):
     pass
@@ -48,9 +50,10 @@ class LampiApp(App):
     _hue = NumericProperty()
     _saturation = NumericProperty()
     _brightness = NumericProperty()
-    lamp_is_on = BooleanProperty()
-    #uhm... idk if this is correct lol
-    current_puzzle_state: list[str] = []
+    current_puzzle_state = ListProperty()
+    PUZZLE_COUNT = 1
+    lamp_is_on = BooleanProperty()#uhm... idk if this is correct lolur
+    current_puzzle_state = []
 
     # moving between the screens!
     def go_to_lampi(self):
@@ -100,6 +103,7 @@ class LampiApp(App):
         self.mqtt_broker_bridged: bool = False
         self._associated: bool = True
         self.association_code: Optional[str] = None
+        self.initialize_states()
         self.mqtt: Client = Client(
             callback_api_version=CallbackAPIVersion.VERSION2,
             client_id=MQTT_CLIENT_ID
@@ -164,6 +168,9 @@ class LampiApp(App):
         self.mqtt.subscribe(TOPIC_LAMP_CHANGE_NOTIFICATION, qos=1)
         self.mqtt.subscribe(TOPIC_LAMP_ASSOCIATED, qos=2)
 
+        self.mqtt.message_callback_add(TOPIC_INCOMING_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), self.receive_new_puzzle_state)
+        self.mqtt.subscribe(TOPIC_INCOMING_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), qos=1)
+
     def _poll_associated(self, dt):
         # this polling loop allows us to synchronize changes from the
         #  MQTT callbacks (which happen in a different thread) to the
@@ -186,13 +193,41 @@ class LampiApp(App):
         else:
             self.associated_status_popup.open()
 
+    def initialize_states(self):
+        self.current_puzzle_state = ['N'] * self.PUZZLE_COUNT
+
+    def publish_puzzle_state(self):
+        TOPIC_OUTGOING_PUZZLE_STATE.replace("{{device_id}}", get_device_id())
+        self.mqtt.publish(TOPIC_OUTGOING_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), self.current_puzzle_state, qos=1)
+                          
+
+    # Updates the puzzle state at index to given state
+    # Publishes new state to mqtt (evaluate logic later)
+    def update_puzzle_state(self, puzzle_index: int, new_state: str, publish: bool):
+        if puzzle_index < 0 or puzzle_index >= self.PUZZLE_COUNT:
+            print("Index out of bounds: " + str(puzzle_index))
+            return
+        self.current_puzzle_state[puzzle_index] = new_state
+        if not publish:
+            return
+        self.publish_puzzle_state()
+
+    # Resets puzzle state at a point to not solved
+    def reset_puzzle_state(self, puzzle_index: int):
+        self.update_puzzle_state(puzzle_index, 'N', True)
+
+    # Starts a puzzle! for partner sync
+    def start_puzzle(self, puzzle_index: int):
+        self.update_puzzle_state(puzzle_index, 'P', False)
+
+    
     def update_popup_associated(self, instance):
         code = self.association_code[0:6]
         instance.content.text = ("Please use the\n"
-                                 "following code\n"
-                                 "to associate\n"
-                                 "your device\n"
-                                 f"on the Web\n{code}")
+                                "following code\n"
+                                "to associate\n"
+                                "your device\n"
+                                f"on the Web\n{code}")
 
     def receive_bridge_connection_status(self, client: Client, userdata: Any,
                                          message: mqtt.MQTTMessage) -> None:
@@ -212,7 +247,7 @@ class LampiApp(App):
     def receive_new_puzzle_state(self, client: Client, userdata: Any,
                                     message: mqtt.MQTTMessage) -> None:
             # Message is passed along as a list of strings, not json (DO NOT DECODE ANY JSON PLSSS)
-            for puzzle_state, index in enumerate(message.payload):
+            for index, puzzle_state in enumerate(message.payload):
                 if(self.current_puzzle_state[index] != puzzle_state):
                     if(puzzle_state == 'S'):
                         print("INSERT PUZZLE SOLVE LOGIC IF ANY")
