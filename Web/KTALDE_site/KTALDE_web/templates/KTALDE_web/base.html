@@ -27,8 +27,6 @@
                 {% if user.is_superuser %}
                     <a href="{% url 'admin:index' %}">Admin</a>
                 {% endif %}
-            {% else %}
-                <a href="{% url 'startgame' %}">Start Game</a>
             {% endif %}
         </div>
         <div id="outer-pane">

@@ -14,12 +14,12 @@ a, h2, label, p {
     color: red;
 }
 
-/* Flexbox page wrapper - centers nav + lamp as a unit */
+/* Flexbox page wrapper - stretches to fill the viewport */
 .page-wrapper {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: stretch;
+    justify-content: flex-start;
     min-height: 100vh;
     gap: 10px;
 }
@@ -27,6 +27,7 @@ a, h2, label, p {
 /* Navigation links */
 #nav-links {
     text-align: center;
+    padding: 10px 0;
 }
 
 #nav-links form {
