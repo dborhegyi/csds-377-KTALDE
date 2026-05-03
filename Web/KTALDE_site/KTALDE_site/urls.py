@@ -20,7 +20,7 @@ from django.views.generic.base import RedirectView
 from KTALDE_web import views
 
 urlpatterns = [
-    path('lampi/', include('KTALDE_web.urls'), name='lampi'),
+    path('ingame/', include('KTALDE_web.urls'), name='ingame'),
     path('admin/', admin.site.urls),
     path('startgame/', views.StartGameView.as_view(), name='startgame'),
     path('logout/', auth_views.LogoutView.as_view(
