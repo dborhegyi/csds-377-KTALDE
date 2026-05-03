@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 from django.views import generic
 from django.shortcuts import get_object_or_404
-from pdf_view.views.pdf_view import PDFView
+from pdf_view.views import PDFView
 from .models import Lampi
 
 
