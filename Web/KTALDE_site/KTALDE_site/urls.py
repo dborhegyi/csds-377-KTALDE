@@ -23,4 +23,7 @@ urlpatterns = [
     path('ingame/', include('KTALDE_web.urls'), name='ingame'),
     path('admin/', admin.site.urls),
     path('startgame/', views.StartGameView.as_view(), name='startgame'),
+    path('pdf-file/', views.MyPDFView.as_view(response_type='pdf'), name='pdf-file'),
+    path('pdf-html/', views.MyPDFView.as_view(response_type='html'), name='pdf-html'),
+    path('pdf-download/', views.MyPDFView.as_view(response_type='download'), name='pdf-download'),
 ]
