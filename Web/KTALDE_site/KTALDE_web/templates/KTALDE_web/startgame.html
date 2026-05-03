@@ -5,12 +5,15 @@
 {% block additional_head_content %}
 <style>
 .start-page {
-  width: 100%;
+  width: min(100%, calc(100vw - 40px));
+  max-width: 1200px;
   padding: 20px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 16px;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.35);
+  box-sizing: border-box;
+  margin: 0 auto;
 }
 .start-page h2 {
   text-align: center;
@@ -21,14 +24,18 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 .association-row label {
-  width: 400px;
+  flex: 0 0 120px;
+  min-width: 120px;
   font-size: 0.95rem;
   margin-right: 0;
 }
 .association-row input {
-  flex: 1;
+  flex: 1 1 360px;
+  min-width: 220px;
+  max-width: 100%;
   padding: 10px 12px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.18);
