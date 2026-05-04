@@ -139,7 +139,6 @@ class LampService:
     def publish_puzzle_state(self, state) -> None:
         self._client.publish(TOPIC_OUTGOING_PUZZLE_STATE, state)
 
-    
 
     def publish_config_change(self) -> None:
         config = {'color': self.get_current_color(),

@@ -29,7 +29,7 @@ class Puzzle_Handler:
         puzzle_state.append(squiggly_wires)
         puzzle_state.append(colors)
 
-        return puzzle_state
+        self.puzzle_layouts[1] = puzzle_state
 
 
     def solve_wire_puzzle(self, positionOfWireCut: int) -> str:
