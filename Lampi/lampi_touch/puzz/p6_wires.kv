@@ -1,0 +1,80 @@
+#:kivy 1.9
+#:include lampi_touch/colors.kv
+
+<P6WiresScreen>:
+    FloatLayout:
+        canvas.before:
+            Color:
+                rgba: offwhite
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        # red wire
+        Button:
+            background_normal: 'images/p1_wire_images/p1_red_straight.png'
+            background_down: 'images/p1_wire_images/p1rsc.png'
+            size_hint: 0.15, 1.2
+            pos_hint: {'center_x': 0.14, 'center_y': 0.5}
+            allow_stretch: True
+            keep_ratio: True
+
+        # blue wire
+        Button:
+            background_normal: 'images/p1_wire_images/p1_blue_straight.png'
+            background_down: 'images/p1_wire_images/p1bsc.png'
+            size_hint: 0.17, 1.2
+            # 0.2 + 0.15 = 0.35
+            pos_hint: {'center_x': 0.4, 'center_y': 0.5}
+            allow_stretch: True
+            keep_ratio: True
+
+        # green wire
+        Button:
+            background_normal: 'images/p1_wire_images/p1_green_straight.png'
+            background_down: 'images/p1_wire_images/p1gsc.png'
+            size_hint: 0.18, 1.2
+            # 0.4 + 0.15 = 0.45
+            pos_hint: {'center_x': 0.65, 'center_y': 0.5}
+            allow_stretch: True
+            keep_ratio: True
+
+        # orange wire
+        Button:
+            background_normal: 'images/p1_wire_images/p1_orange_straight.png'
+            background_down: 'images/p1_wire_images/p1osc.png'
+            size_hint: 0.15, 1.2
+            # 0.5 + 0.15 = 0.65
+            pos_hint: {'center_x': 0.9, 'center_y': 0.5}
+            allow_stretch: True
+            keep_ratio: True
+
+        Widget:
+            size_hint: 1, 0.15
+            pos_hint: {'center_x': 0.5, 'center_y': 0.95}
+            canvas:
+                Color:
+                    rgba: black
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+        Button:
+            text: "Back"
+            font_size: "15sp"
+            background_color: (0.13, 0.59, 0.95, 1)
+            size_hint: 0.25, 0.15
+            pos_hint: {'center_x': 0.9, 'center_y': 0.95}
+            on_press: app.go_to_puzzles()
+
+        Label:
+            text: "Wires"
+            font_size: "15sp"
+            color: offwhite
+            pos_hint: {'center_x': 0.13, 'center_y': 0.95}
+
+        Label:
+            text: "Difficulty: 1/10"
+            font_size: "15sp"
+            color: offwhite
+            pos_hint: {'center_x': 0.51, 'center_y': 0.95}

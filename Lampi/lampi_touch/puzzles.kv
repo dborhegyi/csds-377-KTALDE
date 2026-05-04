@@ -57,10 +57,10 @@
                     pos: self.x + 3, self.y + 3
                     size: self.width - 6, self.height - 6
                     radius: [0]
-            on_press: app.go_to_lampi()
+            on_press: app.go_to_p1wires()
 
         Button:
-            text: "Puzzle 1"
+            text: "Wires 2"
             font_size: "14sp"
             background_color: (0,0,0,0)
             size_hint_x: 0.30
@@ -83,6 +83,8 @@
                     pos: self.x + 3, self.y + 3
                     size: self.width - 6, self.height - 6
                     radius: [0]
+            on_press: app.go_to_p6wires()
+
         Button:
             text: "Puzzle 2"
             font_size: "14sp"

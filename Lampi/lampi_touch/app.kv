@@ -4,6 +4,8 @@
 #:include lampi_touch/waitingHost.kv
 #:include lampi_touch/puzzles.kv
 #:include lampi_touch/addLampi.kv
+#:include lampi_touch/puzz/p1_wires.kv
+#:include lampi_touch/puzz/p6_wires.kv
 
 ScreenManager:
     transition: NoTransition()
@@ -17,3 +19,7 @@ ScreenManager:
         name: 'lampi'
     PuzzlesScreen:
         name: 'puzzles'
+    P1WiresScreen:
+        name: 'p1wires'
+    P6WiresScreen:
+        name: 'p6wires'

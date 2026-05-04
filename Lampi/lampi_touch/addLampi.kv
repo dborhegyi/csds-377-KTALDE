@@ -34,21 +34,32 @@
 
         Label:
             text: "Add your LAMPI to the Web!"
+            # black
             color: 0,0,0,1
             font_size: '14sp'
+            bold: True
             size_hint: 0.9, 0.2
             pos_hint: {'center_x': 0.5, 'center_y': 0.35}
             text_size: self.width, None
             halign: 'center'
             valign: 'middle'
-
+    
+        # association code
+        Label:
+            text: "Association Code:\n" + (app.association_code if app.association_code else "Waiting...")
+            color: black
+            font_size: "14sp"
+            size_hint: 0.9, 0.2
+            pos_hint: {'center_x': 0.5, 'center_y': 0.2}
+            halign: 'center'
+            
         Button:
             text: "View WaitingHost"
-            font_size: "17sp"
+            font_size: "10sp"
             background_color: (0,0,0,0)
-            size_hint_x: 0.5
+            size_hint_x: 0.2
             size_hint_y: 0.2
-            pos_hint: {'center_x': 0.5, 'center_y': 0.2}
+            pos_hint: {'center_x': 0.1, 'center_y': 0.1}
 
             canvas.before:
                 # black outline
