@@ -24,6 +24,8 @@ FP_DIGITS: int = 2
 
 MAX_STARTUP_WAIT_SECS: float = 10.0
 
+#TODO: Need puzzle state topic
+
 
 class InvalidLampConfig(Exception):
     pass
@@ -61,6 +63,7 @@ class LampService:
             self.db['client'] = ''
         self.write_current_settings_to_hardware()
 
+    # I THINK this handles the websockets mqtt
     def _create_and_configure_broker_client(self) -> mqtt.Client:
         client = mqtt.Client(
             callback_api_version=mqtt.CallbackAPIVersion.VERSION2,
@@ -80,6 +83,7 @@ class LampService:
         start_time = time.time()
         while True:
             try:
+                # this connects to broker yess </3
                 self._client.connect(MQTT_BROKER_HOST,
                                      port=MQTT_BROKER_PORT,
                                      keepalive=MQTT_BROKER_KEEP_ALIVE_SECS)
@@ -130,6 +134,11 @@ class LampService:
             self.publish_config_change()
         except InvalidLampConfig:
             print("error applying new settings " + str(msg.payload))
+
+    # Publishes a puzzle state update (List of N/S/F/P for each puzzle)
+    def publish_puzzle_state(self, state) -> None:
+        self._client.publish(TOPIC_OUTGOING_PUZZLE_STATE, state)
+
 
     def publish_config_change(self) -> None:
         config = {'color': self.get_current_color(),
