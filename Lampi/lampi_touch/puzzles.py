@@ -12,24 +12,30 @@ class Puzzle_Handler:
             return
 
     def wire_puzzle_config(self):
-        #randomization of squiggly/zigzag first
-        #randomization of colors second
-        puzzle_state = []
+        #KEY:
+        #wireNumber: 1(red, straight), 2(red, squiggly), 3(red, zigzag)
+        #wireNumber: 4(green, straight), 5(green, squiggly), 6(green, zigzag)
+        #wireNumber: 7(blue, straight), 8(blue, squiggly), 9(blue, zigzag)
+        #wireNumber: 10(orange, straight), 11(orange, squiggly), 12(orange, zigzag)
 
+        #pick random number of each type of wire
         zigzag_wires = random.randint(0, 4)
         squiggly_wires = random.randint(0, 4 - zigzag_wires)
-        colors = []
-        count = 0
-        while count < 4:
-            random_num = random.randint(0, 4)
-            colors.append(random_num)
-            count += 1
+        straight_wires = 4 - zigzag_wires - squiggly_wires
 
-        puzzle_state.append(zigzag_wires)
-        puzzle_state.append(squiggly_wires)
-        puzzle_state.append(colors)
+        straight_nums = [1, 4, 7, 10]
+        squiggly_nums = [2, 5, 8, 11]
+        zigzag_nums = [3, 6, 9, 12]
 
-        self.puzzle_layouts[1] = puzzle_state
+        #Select values then randomize order
+        selected = []
+        selected.extend(random.sample(straight_nums, straight_wires))
+        selected.extend(random.sample(squiggly_nums, squiggly_wires))
+        selected.extend(random.sample(zigzag_nums, zigzag_wires))
+        random.shuffle(selected)
+
+        #save the state for comparison!
+        self.puzzle_layouts[1] = [zigzag_wires, squiggly_wires, selected]
 
 
     def solve_wire_puzzle(self, positionOfWireCut: int) -> str:

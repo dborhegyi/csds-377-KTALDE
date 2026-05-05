@@ -5,7 +5,6 @@ from typing import Any, Optional
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.properties import NumericProperty, ColorProperty, StringProperty
 from kivy.properties import NumericProperty, AliasProperty, BooleanProperty, ColorProperty, StringProperty, ListProperty
 from lampi_touch.lamp_driver import LampDriver
 
@@ -50,10 +49,32 @@ class PuzzlesScreen(Screen):
     pass
 
 class P1WiresScreen(Screen):
-    pass
+    def on_enter(self):
+        app = App.get_running_app()
+        if 1 in app.puzzle_handler.puzzle_layouts:
+            wires = app.puzzle_handler.puzzle_layouts[1][2]
+            for i in range(4):
+                wire_num = wires[i]
+                color_code = {1: 'r', 4: 'g', 7: 'b', 10: 'o'}[((wire_num - 1) // 3) * 3 + 1]
+                type_code = {1: 's', 2: 'w', 3: 'z'}[(wire_num - 1) % 3 + 1]
+                normal = f'images/p1_wire_images/p1{color_code}{type_code}.png'
+                down = f'images/p1_wire_images/p1{color_code}{type_code}c.png'
+                self.ids[f'wire_{i}'].background_normal = normal
+                self.ids[f'wire_{i}'].background_down = down
 
 class P6WiresScreen(Screen):
-    pass
+    def on_enter(self):
+        app = App.get_running_app()
+        if 1 in app.puzzle_handler.puzzle_layouts:
+            wires = app.puzzle_handler.puzzle_layouts[1][2]
+            for i in range(4):
+                wire_num = wires[i]
+                color_code = {1: 'r', 4: 'g', 7: 'b', 10: 'o'}[((wire_num - 1) // 3) * 3 + 1]
+                type_code = {1: 's', 2: 'w', 3: 'z'}[(wire_num - 1) % 3 + 1]
+                normal = f'images/p1_wire_images/p1{color_code}{type_code}.png'
+                down = f'images/p1_wire_images/p1{color_code}{type_code}c.png'
+                self.ids[f'wire_{i}'].background_normal = normal
+                self.ids[f'wire_{i}'].background_down = down
 
 class LampiApp(App):
     _updated: bool = False
@@ -218,11 +239,9 @@ class LampiApp(App):
         #    self.associated_status_popup.dismiss()
         #else:
         #    self.associated_status_popup.open()
-        if value:
-            self.associated_status_popup.dismiss()
-        else:
-            self.associated_status_popup.open()
+        pass
 
+    
     def initialize_states(self):
         self.current_puzzle_state = ['N'] * self.PUZZLE_COUNT
 
@@ -300,10 +319,10 @@ class LampiApp(App):
     def update_popup_associated(self, instance):
         code = self.association_code[0:6]
         instance.content.text = ("Please use the\n"
-                                "following code\n"
-                                "to associate\n"
-                                "your device\n"
-                                f"on the Web\n{code}")
+                                 "following code\n"
+                                 "to associate\n"
+                                 "your device\n"
+                                 f"on the Web\n{code}")
 
     def receive_bridge_connection_status(self, client: Client, userdata: Any,
                                          message: mqtt.MQTTMessage) -> None:
