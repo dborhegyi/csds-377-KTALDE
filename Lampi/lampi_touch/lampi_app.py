@@ -5,7 +5,7 @@ from typing import Any, Optional
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.properties import NumericProperty, AliasProperty, BooleanProperty, ColorProperty, StringProperty, ListProperty
+from kivy.properties import NumericProperty, ColorProperty, StringProperty
 from lampi_touch.lamp_driver import LampDriver
 
 from kivy.properties import NumericProperty, AliasProperty, BooleanProperty
@@ -17,7 +17,6 @@ from paho.mqtt.client import Client, CallbackAPIVersion
 
 from lamp_common import *
 import lampi_touch.lampi_util
-import lampi_touch.puzzles
 
 MQTT_CLIENT_ID = "lamp_ui"
 
@@ -27,9 +26,6 @@ MQTT_PUBLISH_THROTTLE_SECS = 0.05
 
 
 MQTT_CLIENT_ID = "lamp_ui"
-
-# TODO: New python file imported and called for specific puzzle handling :)
-
 
 class HomeScreen(Screen):
     pass
@@ -49,32 +45,10 @@ class PuzzlesScreen(Screen):
     pass
 
 class P1WiresScreen(Screen):
-    def on_enter(self):
-        app = App.get_running_app()
-        if 1 in app.puzzle_handler.puzzle_layouts:
-            wires = app.puzzle_handler.puzzle_layouts[1][2]
-            for i in range(4):
-                wire_num = wires[i]
-                color_code = {1: 'r', 4: 'g', 7: 'b', 10: 'o'}[((wire_num - 1) // 3) * 3 + 1]
-                type_code = {1: 's', 2: 'w', 3: 'z'}[(wire_num - 1) % 3 + 1]
-                normal = f'images/p1_wire_images/p1{color_code}{type_code}.png'
-                down = f'images/p1_wire_images/p1{color_code}{type_code}c.png'
-                self.ids[f'wire_{i}'].background_normal = normal
-                self.ids[f'wire_{i}'].background_down = down
+    pass
 
 class P6WiresScreen(Screen):
-    def on_enter(self):
-        app = App.get_running_app()
-        if 1 in app.puzzle_handler.puzzle_layouts:
-            wires = app.puzzle_handler.puzzle_layouts[1][2]
-            for i in range(4):
-                wire_num = wires[i]
-                color_code = {1: 'r', 4: 'g', 7: 'b', 10: 'o'}[((wire_num - 1) // 3) * 3 + 1]
-                type_code = {1: 's', 2: 'w', 3: 'z'}[(wire_num - 1) % 3 + 1]
-                normal = f'images/p1_wire_images/p1{color_code}{type_code}.png'
-                down = f'images/p1_wire_images/p1{color_code}{type_code}c.png'
-                self.ids[f'wire_{i}'].background_normal = normal
-                self.ids[f'wire_{i}'].background_down = down
+    pass
 
 class LampiApp(App):
     _updated: bool = False
@@ -82,13 +56,9 @@ class LampiApp(App):
     _hue = NumericProperty()
     _saturation = NumericProperty()
     _brightness = NumericProperty()
-    current_puzzle_state = ListProperty()
-    PUZZLE_COUNT = 1
     lamp_is_on = BooleanProperty()
     # association code shenanigans
     association_code = StringProperty("")
-    game_started = BooleanProperty(False)
-    current_puzzle_state = []
 
     # moving between the screens!
     def go_to_lampi(self):
@@ -144,9 +114,6 @@ class LampiApp(App):
         self.mqtt_broker_bridged: bool = False
         self._associated: bool = True
         #self.association_code: Optional[str] = None
-        self.association_code: Optional[str] = None
-        self.initialize_states()
-        self.puzzle_handler = lampi_touch.puzzles.Puzzle_Handler()
         self.mqtt: Client = Client(
             callback_api_version=CallbackAPIVersion.VERSION2,
             client_id=MQTT_CLIENT_ID
@@ -212,11 +179,6 @@ class LampiApp(App):
         self.mqtt.subscribe(TOPIC_LAMP_CHANGE_NOTIFICATION, qos=1)
         self.mqtt.subscribe(TOPIC_LAMP_ASSOCIATED, qos=2)
 
-        self.mqtt.message_callback_add(TOPIC_INCOMING_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), self.receive_new_puzzle_state)
-        self.mqtt.subscribe(TOPIC_INCOMING_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), qos=1)
-        self.mqtt.message_callback_add(TOPIC_GAME_STARTED.replace("{{device_id}}", get_device_id()), self.receive_game_started)
-        self.mqtt.subscribe(TOPIC_GAME_STARTED.replace("{{device_id}}", get_device_id()), qos=1)
-
     def _poll_associated(self, dt):
         # this polling loop allows us to synchronize changes from the
         #  MQTT callbacks (which happen in a different thread) to the
@@ -239,101 +201,11 @@ class LampiApp(App):
         #    self.associated_status_popup.dismiss()
         #else:
         #    self.associated_status_popup.open()
+
+        # no more popup
         pass
-
     
-    def initialize_states(self):
-        self.current_puzzle_state = ['N'] * self.PUZZLE_COUNT
-
-    def publish_puzzle_state(self):
-        TOPIC_OUTGOING_PUZZLE_STATE.replace("{{device_id}}", get_device_id())
-        self.mqtt.publish(TOPIC_OUTGOING_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), self.current_puzzle_state, qos=1)
-    
-    def publish_partner_puzzle_state(self):
-        #functionality
-        return
-
-    # Updates the puzzle state at index to given state
-    # Publishes new state to mqtt (evaluate logic later)
-    def update_puzzle_state(self, puzzle_index: int, new_state: str, publish: bool):
-        if puzzle_index < 0 or puzzle_index >= self.PUZZLE_COUNT:
-            print("Index out of bounds: " + str(puzzle_index))
-            return
-        self.current_puzzle_state[puzzle_index] = new_state
-        if not publish:
-            return
-        self.publish_puzzle_state()
-
-    # Resets puzzle state at a point to not solved
-    def reset_puzzle_state(self, puzzle_index: int):
-        self.update_puzzle_state(puzzle_index, 'N', True)
-
-
-    def on_cut_wire(self, position: int) -> None:
-        if not hasattr(self, 'puzzle_handler') or 1 not in self.puzzle_handler.puzzle_layouts:
-            return
-        result = self.puzzle_handler.solve_wire_puzzle(position)
-        if result == 1:
-            self.update_puzzle_state(0, 'S', True)
-        else:
-            self.update_puzzle_state(0, 'F', True)
-
-    def on_led_puzzle_solve(self, color: float, saturation: float, brightness: float):
-        ##this would be the single player puzzle solve...
-        if not hasattr(self, 'puzzle_handler') or 2 not in self.puzzle_handler.puzzle_layouts:
-            return
-        result = self.puzzle_handler.solve_led_puzzle(color, saturation, brightness)
-        if result == 1:
-            self.update_puzzle_state(0, 'S', True)
-        else:
-            self.update_puzzle_state(0, 'F', True)
-
-    def on_partner_led_solve(self, color: float, saturation: float, brightness: float):
-        #publish state onto partner receiving end
-        return
-
-
-    def _process_incoming_puzzle_state(self, payload: str) -> None:
-        payload = payload.strip()
-        if not payload:
-            return
-
-        states = payload.split(',')
-
-        updated = False
-        for idx, state in enumerate(states):
-            if idx >= self.PUZZLE_COUNT or state not in ('N', 'P', 'S', 'F'):
-                continue
-            if self.current_puzzle_state[idx] != state:
-                self.current_puzzle_state[idx] = state
-                updated = True
-        if updated:
-            print(f"Updated puzzle states: {self.current_puzzle_state}")
-
-    def get_wire_description(self, position: int) -> str:
-        if 1 not in self.puzzle_handler.puzzle_layouts:
-            return "ERROR: Wire puzzle not detected."
-        wires = self.puzzle_handler.puzzle_layouts[1][2]
-        if position >= len(wires):
-            return f"Wire {position}"
-        wire_num = wires[position]
-        color_map = {1: 'Red', 4: 'Green', 7: 'Blue', 10: 'Orange'}
-        shape_map = {1: 'Straight', 2: 'Squiggly', 3: 'Zigzag'}
-        color = color_map.get((wire_num - 1) // 3 * 3 + 1, 'Unknown')
-        shape = shape_map.get((wire_num - 1) % 3 + 1, 'Unknown')
-        return f"{color} {shape}"
-
-    def receive_game_started(self, client: Client, userdata: Any,
-                             message: mqtt.MQTTMessage) -> None:
-        Clock.schedule_once(lambda dt: self.start_game(), 0.01)
-
-    def start_game(self):
-        self.game_started = True
-        self.initialize_states()
-        # Generate wire puzzle layout
-        self.puzzle_handler.wire_puzzle_config()
-
-    
+    # association code stuff
     def update_popup_associated(self, instance):
         code = self.association_code[0:6]
         instance.content.text = ("Please use the\n"
@@ -354,13 +226,6 @@ class LampiApp(App):
                                message: mqtt.MQTTMessage) -> None:
         new_state = json.loads(message.payload.decode('utf-8'))
         Clock.schedule_once(lambda dt: self._update_ui(new_state), 0.01)
-
-    
-    #Processes new puzzle state from Django    
-    def receive_new_puzzle_state(self, client: Client, userdata: Any,
-                                 message: mqtt.MQTTMessage) -> None:
-        payload = message.payload.decode('utf-8')
-        Clock.schedule_once(lambda dt: self._process_incoming_puzzle_state(payload), 0.01)
 
     def _update_ui(self, new_state: dict[str, Any]) -> None:
         """Update UI from MQTT state.
