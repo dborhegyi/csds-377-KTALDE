@@ -120,7 +120,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'KTALDE_web' / 'static',
+    os.path.join(BASE_DIR, 'KTALDE_web', 'static'),
 ]
 
 LOGIN_REDIRECT_URL = '/'
