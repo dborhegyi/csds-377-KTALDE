@@ -173,7 +173,7 @@ class Puzzle_Handler:
 
 #comment out unused puzzle states until they're implemented
     def __init__(self):
-        wire_puzzle_layout = self.wire_puzzle_config()
+        wire_puzzle_config = self.wire_puzzle_config()
         self.puzzle_codes = [1, 2, 3]
         self.puzzle_algorithms = {
             1: self.solve_wire_puzzle,

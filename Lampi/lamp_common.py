@@ -34,6 +34,6 @@ def device_association_topic() -> str:
 # Is this over websockets? Looks like it's manual connection.
 # MQTT Broker Connection info
 MQTT_VERSION: int = paho.mqtt.client.MQTTv311
-MQTT_BROKER_HOST: str = "localhost"
-MQTT_BROKER_PORT: int = 50001
+MQTT_BROKER_HOST: str = "ec2-32-194-170-233.compute-1.amazonaws.com"
+MQTT_BROKER_PORT: int = 50001 # originally 50002, try changing to 50001 to be able to sub on it
 MQTT_BROKER_KEEP_ALIVE_SECS: int = 60
