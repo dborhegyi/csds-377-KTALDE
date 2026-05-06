@@ -3,6 +3,24 @@
 {% block title %}Start Game{% endblock %}
 
 {% block additional_head_content %}
+<script>
+  window.LAMPI_CONFIG = {
+    mqtt: {
+      hostname: window.location.hostname,
+      websocketsPort: 50002
+    },
+    topics: {
+          setConfig: "devices/{{ device.device_id }}/lamp/set_config",
+          lampChanged: "devices/{{ device.device_id }}/lamp/changed",
+          lampServiceState: "devices/{{ device.device_id }}/lamp/connection/lamp_service/state",
+          lampUIState: "devices/{{ device.device_id }}/lamp/connection/lamp_ui/state",
+          gameStarted: "game/started",
+          pubAllPuzzleState: "game/+/puzzleState/sent",
+          pubOnePuzzleState: "game/{{ device.device_id }}/puzzleState/sent",
+          subPuzzleState: "game/{{ device.device_id }}/puzzleState/received"
+      }
+  }
+</script>
 <style>
 .start-page {
   width: min(100%, calc(100vw - 40px));

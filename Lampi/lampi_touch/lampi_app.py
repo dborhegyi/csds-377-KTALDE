@@ -144,7 +144,6 @@ class LampiApp(App):
         self.mqtt_broker_bridged: bool = False
         self._associated: bool = True
         #self.association_code: Optional[str] = None
-        self.association_code: Optional[str] = None
         self.initialize_states()
         self.puzzle_handler = lampi_touch.puzzles.Puzzle_Handler()
         self.mqtt: Client = Client(
@@ -197,6 +196,11 @@ class LampiApp(App):
             self._publish_clock = Clock.schedule_once(
                 lambda dt: self._update_leds(), MQTT_PUBLISH_THROTTLE_SECS)
 
+    def submit_partner_puzzle(self) -> None:
+        payload = {'h': self.hue, 's': self.saturation, 'b': self.brightness}
+        topic = f"game/{get_device_id()}/puzzleState/sent"
+        self.mqtt.publish(topic, json.dumps(payload), qos=1)
+
     def on_connect(self, client: Client, userdata: Any,
                    flags: mqtt.ConnectFlags, reason_code: mqtt.ReasonCode,
                    properties: Optional[mqtt.Properties]) -> None:
@@ -248,7 +252,11 @@ class LampiApp(App):
     def publish_puzzle_state(self):
         TOPIC_OUTGOING_PUZZLE_STATE.replace("{{device_id}}", get_device_id())
         self.mqtt.publish(TOPIC_OUTGOING_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), self.current_puzzle_state, qos=1)
-                          
+    
+    def publish_partner_puzzle_state(self, information):
+        TOPIC_PARTNER_PUZZLE_STATE.replace("{{device_id}}", get_device_id())
+        self.mqtt.publish(TOPIC_PARTNER_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), information, qos=1)
+        return
 
     # Updates the puzzle state at index to given state
     # Publishes new state to mqtt (evaluate logic later)
@@ -274,6 +282,24 @@ class LampiApp(App):
             self.update_puzzle_state(0, 'S', True)
         else:
             self.update_puzzle_state(0, 'F', True)
+
+    def on_led_puzzle_solve(self, color: float, saturation: float, brightness: float):
+        ##this would be the single player puzzle solve...
+        if not hasattr(self, 'puzzle_handler') or 2 not in self.puzzle_handler.puzzle_layouts:
+            return
+        result = self.puzzle_handler.solve_led_puzzle(color, saturation, brightness)
+        if result == 1:
+            self.update_puzzle_state(0, 'S', True)
+        else:
+            self.update_puzzle_state(0, 'F', True)
+
+    def on_partner_led_solve(self, color: float, saturation: float, brightness: float):
+        #publish state onto partner receiving end
+        if not hasattr(self, 'puzzle_handler') or 2 not in self.puzzle_handler.puzzle_layouts:
+            return
+        result = self.puzzle_handler.solve_led_puzzle(color, saturation, brightness)
+        return
+
 
     def _process_incoming_puzzle_state(self, payload: str) -> None:
         payload = payload.strip()
