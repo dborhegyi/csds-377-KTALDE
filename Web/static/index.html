@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+  <title>LAMPI</title>
+
+  <link rel="stylesheet" href="/css/site.css">
+  <link rel="stylesheet" href="/css/lampi-sliders.css">
+
+  <!-- Import map for ES modules - allows npm-style imports without a bundler -->
+  <script type="importmap">
+  {
+    "imports": {
+      "mqtt": "https://unpkg.com/mqtt@5.14.1/dist/mqtt.esm.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!--
+    Alpine.js component
+    x-data: initializes the component with lampController()
+    x-init: runs connect() when component initializes
+    x-cloak: hides element until Alpine is ready (prevents flash of unstyled content)
+  -->
+  <div id="app"
+       x-cloak
+       x-data="lampController()"
+       x-init="connect()">
+
+    <!-- Disconnected overlay - shown when device is offline -->
+    <div class="overlay" x-show="!deviceConnected" x-transition>
+      <div class="overlay-content">
+        <h2>Device Disconnected</h2>
+        <p>This LAMPI device does not seem to be connected to the Internet.</p>
+        <p>Please make sure it is powered on and connected to the network.</p>
+      </div>
+    </div>
+
+    <!-- Main UI container -->
+    <div id="outer-pane" class="centered-root">
+
+      <!-- Top pane with sliders -->
+      <div id="top-pane">
+        <div id="sliders">
+
+          <!-- Hue slider -->
+          <input type="range"
+                 class="slider hue"
+                 min="0" max="1" step="0.01"
+                 x-model.number="hue"
+                 @input="onSliderInput()"
+                 @mousedown="isManipulatingSlider = true"
+                 @touchstart="isManipulatingSlider = true"
+                 :style="{ '--thumb-color': hueThumbColor, '--thumb-border': hueThumbBorder }">
+
+          <!-- Saturation slider -->
+          <input type="range"
+                 class="slider saturation"
+                 min="0" max="1" step="0.01"
+                 x-model.number="saturation"
+                 @input="onSliderInput()"
+                 @mousedown="isManipulatingSlider = true"
+                 @touchstart="isManipulatingSlider = true"
+                 :style="{
+                   '--saturation-end': saturationGradientEnd,
+                   '--thumb-color': saturationThumbColor,
+                   '--thumb-border': saturationThumbBorder
+                 }">
+
+          <!-- Brightness slider -->
+          <input type="range"
+                 class="slider brightness"
+                 min="0" max="1" step="0.01"
+                 x-model.number="brightness"
+                 @input="onSliderInput()"
+                 @mousedown="isManipulatingSlider = true"
+                 @touchstart="isManipulatingSlider = true"
+                 :style="{ '--thumb-color': brightnessThumbColor, '--thumb-border': brightnessThumbBorder }">
+        </div>
+      </div>
+
+      <!-- Color preview box -->
+      <div id="colorbox" :style="{ backgroundColor: colorBoxColor }"></div>
+
+      <!-- Bottom pane with power button -->
+      <div id="bottom-pane">
+        <button id="power"
+                class="toggle-button"
+                @click="togglePower()"
+                :style="{ opacity: on ? 1.0 : 0.3 }">
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Global mouse/touch up handler to detect when slider manipulation ends -->
+  <script>
+    window.addEventListener('mouseup', () => {
+      if (window.Alpine && document.querySelector('[x-data]')?._x_dataStack?.[0]) {
+        document.querySelector('[x-data]')._x_dataStack[0].isManipulatingSlider = false;
+      }
+    });
+    window.addEventListener('touchend', () => {
+      if (window.Alpine && document.querySelector('[x-data]')?._x_dataStack?.[0]) {
+        document.querySelector('[x-data]')._x_dataStack[0].isManipulatingSlider = false;
+      }
+    });
+  </script>
+
+  <!-- Load the lamp controller module (your assignment!) -->
+  <script type="module" src="/js/lamp-controller.js"></script>
+
+  <!-- Alpine.js - loaded last with defer to ensure DOM is ready -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
+</body>
+</html>
