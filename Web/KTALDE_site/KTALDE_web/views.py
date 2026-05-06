@@ -156,14 +156,23 @@ mqtt_client = None
 def setup_partner_mqtt():
     global mqtt_client
     from django.conf import settings
-    mqtt_client = mqtt.Client(
-        callback_api_version=mqtt.CallbackAPIVersion.VERSION2,
-        client_id=MQTT_CLIENT_ID
-    )
-    mqtt_client.on_message = on_message
-    mqtt_client.connect(settings.MQTT_BROKER_HOST, settings.MQTT_BROKER_PORT)
-    mqtt_client.subscribe("game/+/puzzleState/sent")
-    mqtt_client.loop_start()
+    import logging
+    
+    logger = logging.getLogger(__name__)
+    
+    try:
+        mqtt_client = mqtt.Client(
+            callback_api_version=mqtt.CallbackAPIVersion.VERSION2,
+            client_id=MQTT_CLIENT_ID
+        )
+        mqtt_client.on_message = on_message
+        mqtt_client.connect(settings.MQTT_BROKER_HOST, settings.MQTT_BROKER_PORT)
+        mqtt_client.subscribe("game/+/puzzleState/sent")
+        mqtt_client.loop_start()
+        logger.info("MQTT client initialized successfully")
+    except Exception as e:
+        logger.error(f"Failed to initialize MQTT client: {e}")
+        mqtt_client = None
 
 def publish_partner_game_start(game):
     # Publish target color to display lampi's gameStarted topic
