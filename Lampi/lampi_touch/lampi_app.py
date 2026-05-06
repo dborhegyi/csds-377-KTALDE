@@ -219,7 +219,9 @@ class LampiApp(App):
         self.mqtt.message_callback_add(TOPIC_INCOMING_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), self.receive_new_puzzle_state)
         self.mqtt.subscribe(TOPIC_INCOMING_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), qos=1)
         self.mqtt.message_callback_add(TOPIC_GAME_STARTED.replace("{{device_id}}", get_device_id()), self.receive_game_started)
-        self.mqtt.subscribe(TOPIC_GAME_STARTED.replace("{{device_id}}", get_device_id()), qos=1)
+        #self.mqtt.subscribe(TOPIC_GAME_STARTED.replace("{{device_id}}", get_device_id()), qos=1)
+        self.mqtt.message_callback_add("gameStarted", self.receive_game_started)
+        self.mqtt.subscribe("gameStarted", qos=1)
 
     def _poll_associated(self, dt):
         # this polling loop allows us to synchronize changes from the
