@@ -14,5 +14,4 @@ def view_pdf(request):
         file_path = os.path.join('static/KTALDE_web/pdf/ExpertInstructions.pdf')
         return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
     except FileNotFoundError:
-        pass
-        # raise Http404("PDF not found")
+        raise Http404("PDF not found")
