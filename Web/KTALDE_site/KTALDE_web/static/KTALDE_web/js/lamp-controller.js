@@ -237,7 +237,9 @@ function lampController() {
           this.sendGameStateMessage('exploded');
         }
         else if(state === 'P'){
-          // implement Puzzle in Progress logic
+          // send all lampis state updated with P for 'in progress'
+          this.sendAllStateChange('P');
+          return;
         }
 
         //if there are an equal number of solved states and total states, win condition!
@@ -246,7 +248,7 @@ function lampController() {
         }
 
         //reflect state back to state topic (state ACK)
-        this.sendStateChange(payload);
+        this.sendOneStateChange(payload);
         
         
       });
@@ -301,12 +303,21 @@ function lampController() {
       this.client.publish(CONFIG.topics.gameState, state);
     },
 
-    sendStateChange(state) {
+    sendAllStateChange(state) {
       if (!this.client || !this.mqttConnected) {
         return;
       }
 
-      this.client.publish(CONFIG.topics.pubPuzzleState, state);
+      this.client.publish(CONFIG.topics.pubAllPuzzleState, state);
+    },
+
+    
+    sendOneStateChange(state) {
+      if (!this.client || !this.mqttConnected) {
+        return;
+      }
+
+      this.client.publish(CONFIG.topics.pubOnePuzzleState, state);
     },
 
     scheduleConfigChange() {
