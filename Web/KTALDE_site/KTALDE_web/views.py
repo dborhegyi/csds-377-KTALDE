@@ -11,11 +11,11 @@ class StartGameView(generic.TemplateView):
 def ingame(request):
     return render(request, 'KTALDE_web/ingame.html')
 
-def view_pdf(request):
-    try:
-        # Build an absolute path relative to this views.py file
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(base_dir, 'static', 'KTALDE_web', 'pdf', 'ExpertInstructions.pdf')
-        return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
-    except FileNotFoundError:
-        raise Http404("PDF not found")
+# def view_pdf(request):
+#     try:
+#         # Build an absolute path relative to this views.py file
+#         base_dir = os.path.dirname(os.path.abspath(__file__))
+#         file_path = os.path.join(base_dir, 'static', 'KTALDE_web', 'pdf', 'ExpertInstructions.pdf')
+#         return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
+#     except FileNotFoundError:
+#         raise Http404("PDF not found")
