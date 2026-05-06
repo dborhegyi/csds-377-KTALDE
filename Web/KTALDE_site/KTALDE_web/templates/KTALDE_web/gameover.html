@@ -1,16 +1,13 @@
 {% extends "KTALDE_web/base.html" %}
 {% load static %}
 
-{% block title %}In Game{% endblock %}
+{% block title %}Game Over{% endblock %}
 
 {% block content %}
 <div class="game-container">
   <div style="text-align:center; color:white; padding: 50px 0;">
-    <iframe src="{% static 'KTALDE_web/pdf/ExpertInstructions.pdf' %}" 
-            width="800px" 
-            height="600px" 
-            style="border: none;">
-    </iframe>
+    <h1>Game Over</h1>
+    <img src="{% static 'KTALDE_web/images/lampi-waiting-host.png' %}" alt="Game Over" style="max-width: 100%; height: auto; margin-top: 20px;">
   </div>
   <a href="{% url 'startgame' %}" class="back-link">Back to Start</a>
 </div>

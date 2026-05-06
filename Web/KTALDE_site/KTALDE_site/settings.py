@@ -119,8 +119,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'KTALDE_web', 'static'),
+]
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'startgame'
-
-DEFAULT_USER = 'parked_device_user'
