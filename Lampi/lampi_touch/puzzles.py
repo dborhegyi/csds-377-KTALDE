@@ -180,4 +180,4 @@ class Puzzle_Handler:
             #2: self.solve_puzzle_2,
             #3: self.solve_puzzle_3
         }
-        self.puzzle_layouts = []
+        self.puzzle_layouts = [""]
