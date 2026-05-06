@@ -3,7 +3,7 @@ import random
 class Puzzle_Handler:
     puzzle_codes = []
     puzzle_algorithms = {}
-    puzzle_layouts = {}
+    puzzle_layouts = []
 
 
     def solve_puzzle(self, puzzle_code: str) -> str:
@@ -50,7 +50,7 @@ class Puzzle_Handler:
         random.shuffle(selected)
 
         #save the state for comparison!
-        self.puzzle_layouts[1] = [zigzag_wires, squiggly_wires, selected]
+        self.puzzle_layouts[0] = [zigzag_wires, squiggly_wires, selected]
 
 
     #BROKEN RN
@@ -100,11 +100,12 @@ class Puzzle_Handler:
         #wireNumber: 4(green, straight), 5(green, squiggly), 6(green, zigzag)
         #wireNumber: 7(blue, straight), 8(blue, squiggly), 9(blue, zigzag)
         #wireNumber: 10(orange, straight), 11(orange, squiggly), 12(orange, zigzag)
+            
 
-        zigzag_wires = self.puzzle_layouts[1][0]
-        squiggly_wires = self.puzzle_layouts[1][1]
+        zigzag_wires = self.puzzle_layouts[0][0]
+        squiggly_wires = self.puzzle_layouts[0][1]
 
-        wires = self.puzzle_layouts[1][2]  # assumed: list of wire numbers at positions 0-3
+        wires = self.puzzle_layouts[0][2]  # assumed: list of wire numbers at positions 0-3
 
         def color(w):
             if w in (1, 2, 3):   return 'red'
@@ -179,8 +180,5 @@ class Puzzle_Handler:
             #2: self.solve_puzzle_2,
             #3: self.solve_puzzle_3
         }
-        self.puzzle_layouts = {
-            1: self.wire_puzzle_config,
-            #2: self.puzzle_2_layout,
-            #3: self.puzzle_3_layout
-        }
+
+        self.puzzle_layouts = []
