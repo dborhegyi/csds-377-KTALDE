@@ -21,9 +21,10 @@ class Puzzle_Handler:
         saturation = random.choice(['light', 'muted', 'saturated'])
         brightness = random.choice(['dim', 'moderate', 'bright'])
 
+        self.puzzle_layouts[2] = [color, saturation, brightness]
+
         return [color,saturation,brightness]
 
-        self.puzzle_layouts[2] = [color, saturation, brightness]
 
     def wire_puzzle_config(self):
         #KEY:
