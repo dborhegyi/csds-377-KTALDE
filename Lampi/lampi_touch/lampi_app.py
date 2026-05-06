@@ -248,7 +248,10 @@ class LampiApp(App):
     def publish_puzzle_state(self):
         TOPIC_OUTGOING_PUZZLE_STATE.replace("{{device_id}}", get_device_id())
         self.mqtt.publish(TOPIC_OUTGOING_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), self.current_puzzle_state, qos=1)
-                          
+    
+    def publish_partner_puzzle_state(self):
+        #functionality
+        return
 
     # Updates the puzzle state at index to given state
     # Publishes new state to mqtt (evaluate logic later)
@@ -274,6 +277,21 @@ class LampiApp(App):
             self.update_puzzle_state(0, 'S', True)
         else:
             self.update_puzzle_state(0, 'F', True)
+
+    def on_led_puzzle_solve(self, color: float, saturation: float, brightness: float):
+        ##this would be the single player puzzle solve...
+        if not hasattr(self, 'puzzle_handler') or 2 not in self.puzzle_handler.puzzle_layouts:
+            return
+        result = self.puzzle_handler.solve_led_puzzle(color, saturation, brightness)
+        if result == 1:
+            self.update_puzzle_state(0, 'S', True)
+        else:
+            self.update_puzzle_state(0, 'F', True)
+
+    def on_partner_led_solve(self, color: float, saturation: float, brightness: float):
+        #publish state onto partner receiving end
+        return
+
 
     def _process_incoming_puzzle_state(self, payload: str) -> None:
         payload = payload.strip()

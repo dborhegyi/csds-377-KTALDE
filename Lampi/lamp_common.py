@@ -9,6 +9,7 @@ TOPIC_LAMP_ASSOCIATED: str = "lamp/associated"
 TOPIC_OUTGOING_PUZZLE_STATE: str = "game/{{device_id}}/puzzleState/received"
 TOPIC_INCOMING_PUZZLE_STATE: str = "game/{{device_id}}/puzzleState/sent"
 TOPIC_GAME_STARTED: str = "game/{{device_id}}/gameStarted"
+# once we know how this is happening.. TOPIC_PARTNER_PUZZLE_INFO: str= ""
 
 def get_device_id() -> str:
     mac_addr = open(DEVICE_ID_FILENAME).read().strip()
