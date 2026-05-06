@@ -106,6 +106,7 @@ class LampiApp(App):
 
     # all the puzzles
     def go_to_p1wires(self):
+        self.puzzle_handler.wire_puzzle_config()
         self.root.current = 'p1wires'
 
     def go_to_p6wires(self):
