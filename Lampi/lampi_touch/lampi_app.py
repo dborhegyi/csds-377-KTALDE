@@ -52,7 +52,7 @@ class P1WiresScreen(Screen):
     def on_enter(self):
         app = App.get_running_app()
         if 1 in app.puzzle_handler.puzzle_layouts:
-            wires = app.puzzle_handler.puzzle_layouts[1][2]
+            wires = app.puzzle_handler.puzzle_layouts[0][2]
             for i in range(4):
                 wire_num = wires[i]
                 color_code = {1: 'r', 4: 'g', 7: 'b', 10: 'o'}[((wire_num - 1) // 3) * 3 + 1]
@@ -66,7 +66,7 @@ class P6WiresScreen(Screen):
     def on_enter(self):
         app = App.get_running_app()
         if 1 in app.puzzle_handler.puzzle_layouts:
-            wires = app.puzzle_handler.puzzle_layouts[1][2]
+            wires = app.puzzle_handler.puzzle_layouts[0][2]
             for i in range(4):
                 wire_num = wires[i]
                 color_code = {1: 'r', 4: 'g', 7: 'b', 10: 'o'}[((wire_num - 1) // 3) * 3 + 1]
