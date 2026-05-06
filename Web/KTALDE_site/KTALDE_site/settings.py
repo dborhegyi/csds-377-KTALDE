@@ -125,3 +125,10 @@ STATICFILES_DIRS = [
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'startgame'
+
+# MQTT Configuration
+DEFAULT_USER = 'parked_device_user'
+MQTT_DAEMON_USERNAME = os.environ.get('MQTT_DAEMON_USERNAME', 'mqtt_daemon')
+MQTT_DAEMON_PASSWORD = os.environ.get('MQTT_DAEMON_PASSWORD', 'changeme')
+MQTT_BROKER_HOST = 'localhost'
+MQTT_BROKER_PORT = 50002

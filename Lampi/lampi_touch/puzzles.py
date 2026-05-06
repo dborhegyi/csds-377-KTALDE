@@ -51,6 +51,8 @@ class Puzzle_Handler:
         #save the state for comparison!
         self.puzzle_layouts[1] = [zigzag_wires, squiggly_wires, selected]
 
+
+    #BROKEN RN
     def solve_led_puzzle(self, color: float, saturation: float, brightness: float):
         #KEY:
         #Colors: red(0.0-0.1), yellow(0.2-0.3), blue(0.5-0.6), purple(0.7-0.8)

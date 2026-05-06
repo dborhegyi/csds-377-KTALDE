@@ -25,6 +25,12 @@ def broker_bridge_connection_topic() -> str:
     return '$SYS/broker/connection/{}_broker/state'.format(device_id)
 
 
+def device_association_topic() -> str:
+    """Get the device-specific association topic."""
+    device_id = get_device_id()
+    return 'devices/{}/lamp/associated'.format(device_id)
+
+
 # Is this over websockets? Looks like it's manual connection.
 # MQTT Broker Connection info
 MQTT_VERSION: int = paho.mqtt.client.MQTTv311

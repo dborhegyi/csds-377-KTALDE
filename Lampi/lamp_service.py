@@ -212,12 +212,11 @@ class LampService:
                                 msg: mqtt.MQTTMessage):
         payload = json.loads(msg.payload.decode('utf-8'))
         if payload.get('match'):
-            # Flash green for win
-            self.set_current_color({'h': 0.33, 's': 1.0, 'b': 1.0})
+            #make sure that THIS STATE is 'S'.
+            print('win')
         else:
-            # Flash red for lose
-            self.set_current_color({'h': 0.0, 's': 1.0, 'b': 1.0})
-        self.publish_config_change()
+            #set this state as 'F'
+            print('loss')
         
 
 if __name__ == '__main__':

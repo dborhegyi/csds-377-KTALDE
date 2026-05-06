@@ -4,11 +4,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.conf import settings
-from .models import Lampi
-
-
-def device_association_topic(device_id: str) -> str:
-    return 'devices/{}/lamp/associated'.format(device_id)
+from .models import Lampi, get_parked_user
 
 
 class AddLampiForm(forms.Form):
@@ -17,18 +13,23 @@ class AddLampiForm(forms.Form):
 
     def clean(self) -> dict[str, Any]:
         cleaned_data = super(AddLampiForm, self).clean()
-        print("received form with code {}".format(
-              cleaned_data['association_code']))
-        # look up device with start of association_code
-        uname = settings.DEFAULT_USER
-        parked_user = get_user_model().objects.get(username=uname)
+        code = cleaned_data.get('association_code')
+        if not code:
+            return cleaned_data
+        
+        print("received form with code {}".format(code))
+        
+        # look up device with association code
+        parked_user = get_parked_user()
         devices = Lampi.objects.filter(
             user=parked_user,
-            association_code__startswith=cleaned_data['association_code'])
+            association_code__startswith=code)
+        
         if not devices:
             self.add_error('association_code',
                            ValidationError("Invalid Association Code",
                                            code='invalid'))
         else:
             cleaned_data['device'] = devices[0]
+        
         return cleaned_data

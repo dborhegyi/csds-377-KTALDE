@@ -1,7 +1,8 @@
 from typing import Any, Dict
 from django.views import generic
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.urls import reverse, reverse_lazy
 from .models import Lampi, Game
 from .forms import AddLampiForm
 
@@ -154,9 +155,13 @@ mqtt_client = None
 
 def setup_partner_mqtt():
     global mqtt_client
-    mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_ID)
+    from django.conf import settings
+    mqtt_client = mqtt.Client(
+        callback_api_version=mqtt.CallbackAPIVersion.VERSION2,
+        client_id=MQTT_CLIENT_ID
+    )
     mqtt_client.on_message = on_message
-    mqtt_client.connect("localhost", 50002)
+    mqtt_client.connect(settings.MQTT_BROKER_HOST, settings.MQTT_BROKER_PORT)
     mqtt_client.subscribe("game/+/puzzleState/sent")
     mqtt_client.loop_start()
 

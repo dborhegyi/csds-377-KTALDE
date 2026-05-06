@@ -195,8 +195,8 @@ class LampiApp(App):
         if self._publish_clock is None:
             self._publish_clock = Clock.schedule_once(
                 lambda dt: self._update_leds(), MQTT_PUBLISH_THROTTLE_SECS)
-
-    def submit_partner_puzzle(self) -> None:
+    
+    def submit_partner_puzzle(self):
         payload = {'h': self.hue, 's': self.saturation, 'b': self.brightness}
         topic = f"game/{get_device_id()}/puzzleState/sent"
         self.mqtt.publish(topic, json.dumps(payload), qos=1)
@@ -210,11 +210,11 @@ class LampiApp(App):
                                        self.receive_new_lamp_state)
         self.mqtt.message_callback_add(broker_bridge_connection_topic(),
                                        self.receive_bridge_connection_status)
-        self.mqtt.message_callback_add(TOPIC_LAMP_ASSOCIATED,
+        self.mqtt.message_callback_add(device_association_topic(),
                                        self.receive_associated)
         self.mqtt.subscribe(broker_bridge_connection_topic(), qos=1)
         self.mqtt.subscribe(TOPIC_LAMP_CHANGE_NOTIFICATION, qos=1)
-        self.mqtt.subscribe(TOPIC_LAMP_ASSOCIATED, qos=2)
+        self.mqtt.subscribe(device_association_topic(), qos=2)
 
         self.mqtt.message_callback_add(TOPIC_INCOMING_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), self.receive_new_puzzle_state)
         self.mqtt.subscribe(TOPIC_INCOMING_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), qos=1)

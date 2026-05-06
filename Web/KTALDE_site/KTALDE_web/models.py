@@ -2,31 +2,45 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.conf import settings
-from uuid import uuid4
 import json
 import paho.mqtt.publish
-
-DEFAULT_USER: str = 'parked_device_user'
+import secrets
+import string
 
 
 def get_parked_user() -> User:
-    return get_user_model().objects.get_or_create(username=DEFAULT_USER)[0]
+    return get_user_model().objects.get_or_create(username=settings.DEFAULT_USER)[0]
 
 
 def generate_association_code() -> str:
-    return uuid4().hex
+    """Generate a 6-character association code."""
+    alphabet = string.ascii_uppercase + string.digits
+    return ''.join(secrets.choice(alphabet) for _ in range(6))
 
 
 
 class Lampi(models.Model):
     name = models.CharField(max_length=50, default="My LAMPI")
     device_id = models.CharField(max_length=12, primary_key=True)
+    association_code = models.CharField(
+        max_length=6,
+        unique=True,
+        blank=True,
+        null=True,
+        db_index=True
+    )
     user = models.ForeignKey(User,
                              on_delete=models.SET(get_parked_user))
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return "{}: {}".format(self.device_id, self.name)
+
+    def save(self, *args, **kwargs):
+        """Auto-generate association code if not set."""
+        if not self.association_code:
+            self.association_code = generate_association_code()
+        super().save(*args, **kwargs)
 
 
 class Game(models.Model):
@@ -56,8 +70,8 @@ class Game(models.Model):
                   'password': settings.MQTT_DAEMON_PASSWORD},
             qos=2,
             retain=True,
-            hostname="localhost",
-            port=1883,
+            hostname=settings.MQTT_BROKER_HOST,
+            port=settings.MQTT_BROKER_PORT,
             )
 
     def associate_and_publish_associated_msg(self, user: User) -> None:
@@ -75,6 +89,6 @@ class Game(models.Model):
                   'password': settings.MQTT_DAEMON_PASSWORD},
             qos=2,
             retain=True,
-            hostname="localhost",
-            port=50002,
+            hostname=settings.MQTT_BROKER_HOST,
+            port=settings.MQTT_BROKER_PORT,
             )

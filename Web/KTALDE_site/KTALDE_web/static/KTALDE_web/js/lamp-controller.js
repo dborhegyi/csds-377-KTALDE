@@ -332,7 +332,7 @@ function lampController() {
       this.client.publish(CONFIG.topics.pubAllPuzzleState, state);
     },
 
-
+    
     sendOneStateChange(state) {
       if (!this.client || !this.mqttConnected) {
         return;

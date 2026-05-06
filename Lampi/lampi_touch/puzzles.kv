@@ -110,29 +110,3 @@
                     size: self.width - 6, self.height - 6
                     radius: [0]
         #make a submit button that calls app.submit_puzzle()
-
-        Button:
-            text: "Submit Partner Puzzle"
-            font_size: "14sp"
-            background_color: (0,0,0,0)
-            size_hint_x: 0.30
-            size_hint_y: 0.15
-            pos_hint: {'center_x': 0.5, 'center_y': 0.2}
-
-            canvas.before:
-                # black outline
-                Color:
-                    rgba: 0, 0, 0, 1
-                RoundedRectangle:
-                    pos: self.pos
-                    size: self.size
-                    radius: [0]
-
-                # green background
-                Color:
-                    rgba: 0.0, 0.8, 0.0, 1
-                RoundedRectangle:
-                    pos: self.x + 3, self.y + 3
-                    size: self.width - 6, self.height - 6
-                    radius: [0]
-            on_press: app.submit_partner_puzzle()
