@@ -73,6 +73,10 @@ class LampService:
         client.on_connect = self.on_connect
         client.message_callback_add(TOPIC_SET_LAMP_CONFIG,
                                     self.on_message_set_config)
+        client.message_callback_add("game/{{device_id}}/gameStarted".replace("{{device_id}}", get_device_id()),
+                                    self.on_partner_game_started)
+        client.message_callback_add("game/{{device_id}}/partnerPuzzleStates".replace("{{device_id}}", get_device_id()),
+                                    self.on_partner_game_result)
         client.on_message = self.default_on_message
         return client
 
@@ -106,6 +110,8 @@ class LampService:
         self._client.publish(client_state_topic(MQTT_CLIENT_ID), "1",
                              qos=2, retain=True)
         self._client.subscribe(TOPIC_SET_LAMP_CONFIG, qos=1)
+        self._client.subscribe("game/{{device_id}}/gameStarted".replace("{{device_id}}", get_device_id()), qos=1)
+        self._client.subscribe("game/{{device_id}}/partnerPuzzleStates".replace("{{device_id}}", get_device_id()), qos=1)
         # publish current lamp state at startup
         self.publish_config_change()
 
@@ -194,6 +200,24 @@ class LampService:
                             for channel in rgb)
         return r, g, b
 
+    def on_partner_game_started(self, client: mqtt.Client, userdata: Any,
+                                msg: mqtt.MQTTMessage):
+        payload = json.loads(msg.payload.decode('utf-8'))
+        if 'color' in payload:
+            self.set_current_color(payload['color'])
+            self.set_current_onoff(True)
+            self.publish_config_change()
+
+    def on_partner_game_result(self, client: mqtt.Client, userdata: Any,
+                                msg: mqtt.MQTTMessage):
+        payload = json.loads(msg.payload.decode('utf-8'))
+        if payload.get('match'):
+            #make sure that THIS STATE is 'S'.
+            print('win')
+        else:
+            #set this state as 'F'
+            print('loss')
+        
 
 if __name__ == '__main__':
     LampService().serve()

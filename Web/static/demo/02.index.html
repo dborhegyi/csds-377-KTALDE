@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LAMPI UI Structure</title>
+</head>
+<body>
+  <main>
+    <div class="labels">
+      <div>
+        Power: <span id="powerState">Off</span>
+      </div>
+      <div>
+        Brightness: <span id="brightnessValue">50</span>%
+      </div>
+    </div>
+    <div class="sliders">
+      <input id="brightness" class="slider" type="range" min="0" max="100" step="1">
+    </div>
+    <div class="colorbox"></div>
+    <div class="buttons">
+      <button id="power" type="button" class="btn btn-default">Power</button>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,214 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #1A1A1A;
+  font-family: 'Special Elite', cursive, sans-serif;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+a, h2, h3, label, p {
+    color: white;
+}
+
+.errorlist {
+    color: red;
+}
+
+/* Flexbox page wrapper - centers content in viewport */
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    gap: 10px;
+}
+
+/* Navigation links */
+#nav-links {
+    text-align: center;
+    padding: 10px 0;
+}
+
+#nav-links form {
+    display: inline;
+}
+
+.toggle-button {
+  height: 40px;
+  width: 40px;
+  margin: auto;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+#outer-pane {
+  min-height: 340px;
+  width: 90vw;
+  height: auto;
+  padding: 12px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+#bottom-pane, #top-pane, #colorbox{
+  float: top;
+  overflow: hidden;
+  width: 100%;
+}
+
+#bottom-pane {
+  position: relative;
+  background-color: #000000;
+  height: 27.5%;
+}
+
+#top-pane {
+  background-color: #F7F7F7;
+  height: 67.5%;
+}
+
+#colorbox {
+  background-color: #FF0000;
+  height: 2.5%;
+}
+
+#labels {
+  position: relative;
+  top: 50%;
+  left: 55%;
+  height: 25%;
+  width: 75%;
+  transform: translate(-50%, -50%);
+}
+
+#labels div {
+    float: left;
+    margin: 0 50px 0 0;
+}
+
+#labels div span {
+    font-weight: bold;
+}
+
+#labels div::after {
+    clear: both;
+}
+
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.btn-default {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+
+.btn-default:active,
+.btn-default.active {
+  background-color: #ffffff;
+}
+
+.btn-default:hover {
+  background-color: #ebebeb;
+}
+
+.btn-link {
+    border: none;
+    outline: none;
+    background: none;
+    cursor: pointer;
+    color: white;
+    padding: 0;
+    text-decoration: underline;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+/* Alpine.js app container */
+#app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Game and page containers */
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 260px;
+}
+.back-link,
+.start-link {
+  display: flex;
+  justify-content: center;
+  width: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  padding: 10px 16px;
+  text-decoration: none;
+}
+
+/* Device disconnected overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.overlay-content {
+  text-align: center;
+  color: white;
+  padding: 2rem;
+}
+
+.overlay-content h2 {
+  margin-bottom: 1rem;
+  color: #ff6b6b;
+}
+
+.overlay-content p {
+  margin: 0.5rem 0;
+  color: #ccc;
+}

@@ -195,6 +195,11 @@ class LampiApp(App):
         if self._publish_clock is None:
             self._publish_clock = Clock.schedule_once(
                 lambda dt: self._update_leds(), MQTT_PUBLISH_THROTTLE_SECS)
+    
+    def submit_partner_puzzle(self):
+        payload = {'h': self.hue, 's': self.saturation, 'b': self.brightness}
+        topic = f"game/{get_device_id()}/puzzleState/sent"
+        self.mqtt.publish(topic, json.dumps(payload), qos=1)
 
     def on_connect(self, client: Client, userdata: Any,
                    flags: mqtt.ConnectFlags, reason_code: mqtt.ReasonCode,
@@ -205,16 +210,18 @@ class LampiApp(App):
                                        self.receive_new_lamp_state)
         self.mqtt.message_callback_add(broker_bridge_connection_topic(),
                                        self.receive_bridge_connection_status)
-        self.mqtt.message_callback_add(TOPIC_LAMP_ASSOCIATED,
+        self.mqtt.message_callback_add(device_association_topic(),
                                        self.receive_associated)
         self.mqtt.subscribe(broker_bridge_connection_topic(), qos=1)
         self.mqtt.subscribe(TOPIC_LAMP_CHANGE_NOTIFICATION, qos=1)
-        self.mqtt.subscribe(TOPIC_LAMP_ASSOCIATED, qos=2)
+        self.mqtt.subscribe(device_association_topic(), qos=2)
 
         self.mqtt.message_callback_add(TOPIC_INCOMING_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), self.receive_new_puzzle_state)
         self.mqtt.subscribe(TOPIC_INCOMING_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), qos=1)
         self.mqtt.message_callback_add(TOPIC_GAME_STARTED.replace("{{device_id}}", get_device_id()), self.receive_game_started)
-        self.mqtt.subscribe(TOPIC_GAME_STARTED.replace("{{device_id}}", get_device_id()), qos=1)
+        #self.mqtt.subscribe(TOPIC_GAME_STARTED.replace("{{device_id}}", get_device_id()), qos=1)
+        self.mqtt.message_callback_add("gameStarted", self.receive_game_started)
+        self.mqtt.subscribe("gameStarted", qos=1)
 
     def _poll_associated(self, dt):
         # this polling loop allows us to synchronize changes from the
@@ -248,8 +255,9 @@ class LampiApp(App):
         TOPIC_OUTGOING_PUZZLE_STATE.replace("{{device_id}}", get_device_id())
         self.mqtt.publish(TOPIC_OUTGOING_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), self.current_puzzle_state, qos=1)
     
-    def publish_partner_puzzle_state(self):
-        #functionality
+    def publish_partner_puzzle_state(self, information):
+        TOPIC_PARTNER_PUZZLE_STATE.replace("{{device_id}}", get_device_id())
+        self.mqtt.publish(TOPIC_PARTNER_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), information, qos=1)
         return
 
     # Updates the puzzle state at index to given state
@@ -289,6 +297,9 @@ class LampiApp(App):
 
     def on_partner_led_solve(self, color: float, saturation: float, brightness: float):
         #publish state onto partner receiving end
+        if not hasattr(self, 'puzzle_handler') or 2 not in self.puzzle_handler.puzzle_layouts:
+            return
+        result = self.puzzle_handler.solve_led_puzzle(color, saturation, brightness)
         return
 
 

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LAMPI with Alpine.js - Button</title>
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+  <!-- x-data defines reactive state for this element and its children -->
+  <main x-data="{ isPowered: false }">
+    <div class="labels">
+      <div>
+        <!-- x-text updates the text content reactively -->
+        Power: <span x-text="isPowered ? 'On' : 'Off'"></span>
+      </div>
+      <div>
+        Brightness: <span id="brightnessValue">50</span>%
+      </div>
+    </div>
+    <div class="sliders">
+      <input id="brightness" class="slider" type="range" min="0" max="100" step="1">
+    </div>
+    <div class="colorbox"></div>
+    <div class="buttons">
+      <!-- @click toggles the isPowered state -->
+      <button type="button" class="btn btn-default" @click="isPowered = !isPowered">
+        Power
+      </button>
+    </div>
+  </main>
+
+  <!-- Alpine.js from CDN - defer ensures it loads after DOM is ready -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
+</body>
+</html>
