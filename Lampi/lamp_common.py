@@ -35,5 +35,5 @@ def device_association_topic() -> str:
 # MQTT Broker Connection info
 MQTT_VERSION: int = paho.mqtt.client.MQTTv311
 MQTT_BROKER_HOST: str = "localhost"
-MQTT_BROKER_PORT: int = 50002
+MQTT_BROKER_PORT: int = 50001
 MQTT_BROKER_KEEP_ALIVE_SECS: int = 60

@@ -89,6 +89,7 @@ class LampiApp(App):
     association_code = StringProperty("")
     game_started = BooleanProperty(False)
     current_puzzle_state = []
+    gameRan = StringProperty("")
 
     # moving between the screens!
     def go_to_lampi(self):
@@ -249,7 +250,7 @@ class LampiApp(App):
 
     
     def initialize_states(self):
-        self.current_puzzle_state = ['N'] * self.PUZZLE_COUNT
+        self.current_puzzle_state = ['N']
 
     def publish_puzzle_state(self):
         TOPIC_OUTGOING_PUZZLE_STATE.replace("{{device_id}}", get_device_id())
@@ -335,6 +336,7 @@ class LampiApp(App):
 
     def receive_game_started(self, client: Client, userdata: Any,
                              message: mqtt.MQTTMessage) -> None:
+        gameRan = "YES IT DID!!"
         Clock.schedule_once(lambda dt: self.start_game(), 0.01)
 
     def start_game(self):
