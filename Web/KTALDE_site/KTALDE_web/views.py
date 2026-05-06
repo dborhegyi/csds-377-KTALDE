@@ -7,12 +7,21 @@ import os
 
 class StartGameView(generic.TemplateView):
     template_name = 'KTALDE_web/startgame.html'
- 
-def view_pdf(request):
-    try:
-        # Open the PDF file in binary read mode
-        file_path = os.path.join('static/KTALDE_web/pdf/ExpertInstructions.pdf')
-        return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
-    except FileNotFoundError:
-        pass
-        # raise Http404("PDF not found")
+
+def ingame(request):
+    return render(request, 'KTALDE_web/ingame.html')
+
+def gameover(request):
+    return render(request, 'KTALDE_web/gameover.html')
+
+def win(request):
+    return render(request, 'KTALDE_web/win.html')
+
+# def view_pdf(request):
+#     try:
+#         # Build an absolute path relative to this views.py file
+#         base_dir = os.path.dirname(os.path.abspath(__file__))
+#         file_path = os.path.join(base_dir, 'static', 'KTALDE_web', 'pdf', 'ExpertInstructions.pdf')
+#         return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
+#     except FileNotFoundError:
+#         raise Http404("PDF not found")
