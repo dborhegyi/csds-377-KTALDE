@@ -144,7 +144,6 @@ class LampiApp(App):
         self.mqtt_broker_bridged: bool = False
         self._associated: bool = True
         #self.association_code: Optional[str] = None
-        self.association_code: Optional[str] = None
         self.initialize_states()
         self.puzzle_handler = lampi_touch.puzzles.Puzzle_Handler()
         self.mqtt: Client = Client(
