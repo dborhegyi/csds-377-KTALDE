@@ -11,6 +11,12 @@ class StartGameView(generic.TemplateView):
 def ingame(request):
     return render(request, 'KTALDE_web/ingame.html')
 
+def gameover(request):
+    return render(request, 'KTALDE_web/gameover.html')
+
+def win(request):
+    return render(request, 'KTALDE_web/win.html')
+
 # def view_pdf(request):
 #     try:
 #         # Build an absolute path relative to this views.py file
