@@ -165,16 +165,17 @@ class Puzzle_Handler:
         return 1 if positionOfWireCut == correct else 0
 
 
+#comment out unused puzzle states until they're implemented
     def __init__(self):
         wire_puzzle_layout = self.wire_puzzle_config()
         self.puzzle_codes = [1, 2, 3]
         self.puzzle_algorithms = {
             1: self.solve_wire_puzzle,
-            2: self.solve_puzzle_2,
-            3: self.solve_puzzle_3
+            #2: self.solve_puzzle_2,
+            #3: self.solve_puzzle_3
         }
         self.puzzle_layouts = {
             1: self.wire_puzzle_layout,
-            2: self.puzzle_2_layout,
-            3: self.puzzle_3_layout
+            #2: self.puzzle_2_layout,
+            #3: self.puzzle_3_layout
         }
