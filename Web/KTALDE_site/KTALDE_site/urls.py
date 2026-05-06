@@ -22,5 +22,6 @@ urlpatterns = [
     path('', include('KTALDE_web.urls')),
     path('startgame/', views.StartGameView.as_view(), name='startgame'),
     path('ingame/', views.ingame, name='ingame'),
-    # path('ingame/pdf/', views.view_pdf, name='ingame_pdf'),
+    path('gameover/', views.gameover, name='gameover'),
+    path('win/', views.win, name='win'),
 ]
