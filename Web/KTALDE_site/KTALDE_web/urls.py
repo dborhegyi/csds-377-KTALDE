@@ -4,5 +4,5 @@ from . import views
 app_name = 'KTALDE_web'
 
 urlpatterns = [
-    path('', views.IndexView.as_view(), name='index'),
+    path('startgame/', views.StartGameView.as_view(), name='startgame'),
 ]
