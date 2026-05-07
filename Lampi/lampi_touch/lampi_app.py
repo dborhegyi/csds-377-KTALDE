@@ -287,9 +287,19 @@ class LampiApp(App):
             return
         result = self.puzzle_handler.solve_wire_puzzle(position)
         if result == 1:
-            self.update_puzzle_state(0, 'S', True)
+            self.update_puzzle_state(0, 'S', False)  # Temporarily disable publish to avoid crash
         else:
-            self.update_puzzle_state(0, 'F', True)
+            self.update_puzzle_state(0, 'F', False)
+        # Update the UI to show the cut wire
+        screen = self.root.current_screen
+        if hasattr(screen, 'ids') and f'wire_{position}' in screen.ids:
+            wire_button = screen.ids[f'wire_{position}']
+            wire_button.background_normal = wire_button.background_down
+        # Update the UI to show the cut wire
+        screen = self.root.current_screen
+        if hasattr(screen, 'ids') and f'wire_{position}' in screen.ids:
+            wire_button = screen.ids[f'wire_{position}']
+            wire_button.background_normal = wire_button.background_down
 
     def on_led_puzzle_solve(self, sliderValue: float):
         ##this would be the single player puzzle solve...
