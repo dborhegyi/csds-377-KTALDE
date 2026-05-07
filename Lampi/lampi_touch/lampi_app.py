@@ -24,7 +24,7 @@ from lamp_common import *
 import lampi_touch.lampi_util
 import lampi_touch.puzzles
 
-MQTT_CLIENT_ID = "lamp_ui"
+MQTT_CLIENT_ID = "lamp_ui_1"
 
 # Throttle MQTT publishes to 20/sec max (0.05s) to prevent overwhelming
 # the lamp_service with messages during rapid slider movement.
@@ -425,7 +425,7 @@ class LampiApp(App):
         try:
             print(f"receive_game_started called with payload: {message.payload}")
             Clock.schedule_once(lambda dt: self.start_game(), 0.01)
-            self.mqtt.publish("game1/started", "started")
+            # self.mqtt.publish("game1/started", "started")
         except Exception as e:
             print(f"ERROR in receive_game_started: {e}")
 
