@@ -16,7 +16,8 @@ import paho.mqtt.client as mqtt
 from paho.mqtt.client import Client, CallbackAPIVersion
 import time
 
-import lampi_touch.lightseq
+import lampi_touch.lightseq.winseq
+import lampi_touch.lightseq.loseseq
 
 from lamp_common import *
 import lampi_touch.lampi_util
