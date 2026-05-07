@@ -265,7 +265,7 @@ function lampController() {
        }
 
       if (topic === "game1/state/explode"){
-        window.location.href = "http://ec2-32-194-170-233.compute-1.amazonaws.com:8000/gameover.html/";
+        window.location.href = "http://ec2-32-194-170-233.compute-1.amazonaws.com:8000/gameover";
         return;
       }
 
