@@ -117,8 +117,9 @@ function lampController() {
     //GOOD, REAL TOPIC!!!
     startGame() {
       if (!this.client || !this.mqttConnected) return;
-      this.client.publish("devices/+/game/started","started", { qos: 1})
-    }
+      this.client.publish("devices/b827eb41788e/game/started","started", { qos: 1});
+
+    },
 
     submitPuzzle() {
       if (!this.client || !this.mqttConnected) return;
