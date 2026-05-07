@@ -15,7 +15,7 @@
             Rectangle:
                 pos: self.pos
                 size: self.size
-            orientation: 'vertical'
+                orientation: 'vertical'
             BoxLayout:
                 orientation: 'vertical'
                 padding: 30
@@ -30,18 +30,18 @@
                         halign: 'center'
                 #SLIDER
                 GradientSlider:
-                id: color_slider
-                size_hint_y: 0.33
-                colors: red, yellow, green, cyan, blue, magenta, red
-                value: app.color_value
-                on_value: app.color_value = self.value_normalized
+                    id: color_slider
+                    size_hint_y: 0.33
+                    colors: red, yellow, green, cyan, blue, magenta, red
+                    value: app.color_value
+                    on_value: app.color_value = self.value_normalized
                 Button:
-                        text: "Submit Answer!"
-                        font_size: "17sp"
-                        background_color: (0,0,0,0)
-                        size_hint_x: 0.5
-                        size_hint_y: 0.2
-                        pos_hint: {'center_x': 0.5, 'center_y': 0.3}
+                    text: "Submit Answer!"
+                    font_size: "17sp"
+                    background_color: (0,0,0,0)
+                    size_hint_x: 0.5
+                    size_hint_y: 0.2
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.3}
                 Button:
                     text: "Submit"
                     font_size: "14sp"
