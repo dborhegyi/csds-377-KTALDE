@@ -278,10 +278,10 @@ class LampiApp(App):
     def publish_puzzle_state(self):
         self.mqtt.publish(TOPIC_OUTGOING_PUZZLE_STATE_1, self.current_puzzle_state, qos=1)
     
-    def publish_partner_puzzle_state(self, information):
-        TOPIC_PARTNER_PUZZLE_STATE.replace("{{device_id}}", get_device_id())
-        self.mqtt.publish(TOPIC_PARTNER_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), information, qos=1)
-        return
+    # def publish_partner_puzzle_state(self, information):
+    #     TOPIC_PARTNER_PUZZLE_STATE.replace("{{device_id}}", get_device_id())
+    #     self.mqtt.publish(TOPIC_PARTNER_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), information, qos=1)
+    #     return
 
     # Updates the puzzle state at index to given state
     # Publishes new state to mqtt (evaluate logic later)
@@ -308,7 +308,7 @@ class LampiApp(App):
             wire_button = screen.ids[f'wire_{position}']
             wire_button.background_normal = wire_button.background_down
         if result == 1:
-            self.update_puzzle_state(0, 'S', False)
+            self.current_puzzle_state[0] = 'S'
             Clock.schedule_once(lambda dt: self.go_to_success_screen(), 0.5)
         else:
             self.update_puzzle_state(0, 'F', False)
