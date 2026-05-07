@@ -352,7 +352,8 @@ class LampiApp(App):
         self.puzzle_handler.wire_puzzle_config()
 
     
-    # def update_popup_associated(self, instance):
+    def update_popup_associated(self, instance):
+        pass
     #     code = self.association_code[0:6]
     #     instance.content.text = ("Please use the\n"
     #                              "following code\n"
