@@ -117,7 +117,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'KTALDE_web', 'static'),
@@ -125,3 +125,10 @@ STATICFILES_DIRS = [
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'startgame'
+
+# MQTT Configuration
+DEFAULT_USER = 'parked_device_user'
+MQTT_DAEMON_USERNAME = os.environ.get('MQTT_DAEMON_USERNAME', 'mqtt_daemon')
+MQTT_DAEMON_PASSWORD = os.environ.get('MQTT_DAEMON_PASSWORD', 'changeme')
+MQTT_BROKER_HOST = 'localhost'
+MQTT_BROKER_PORT = 50002

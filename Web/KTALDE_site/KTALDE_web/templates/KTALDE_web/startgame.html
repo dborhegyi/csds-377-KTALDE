@@ -124,22 +124,73 @@
 <div class="start-page">
   <h2>Add Puzzle Solver</h2>
   <div class="start-container">
+
+    <!-- player 1 association code -->
+    <!--
     <div class="association-row">
       <label for="code1">Player 1</label>
       <h3>Bomb Code: jdfjifdjdsoodfojf</h3>
     </div>
+    -->
+    <form method="post" action="{% url 'startgame' %}">
+      {% csrf_token %}
+      <input type="hidden" name="player_slot" value="1">
+      <div class="association-row">
+        <label for="code1">Player 1</label>
+        <input id="code1" name="association_code" type="text" placeholder="Association code"
+               value="{{ player1_code|default:'' }}"
+               {% if player1_device %}readonly{% endif %}>
+        <button type="submit">
+          {% if player1_device %}✓ Added{% else %}Add{% endif %}
+        </button>
+      </div>
+      {% if form1.errors %}
+        <div class="form-error">{{ form1.association_code.errors }}</div>
+      {% endif %}
+    </form>
+
+
+    <!-- player 2 association code -->
+    <!--
     <div class="association-row">
       <label for="code2">Player 2</label>
       <h3>Bomb Code: adosniadhvf</h3>
     </div>
+    -->
+    <form method="post" action="{% url 'startgame' %}">
+      {% csrf_token %}
+      <input type="hidden" name="player_slot" value="2">
+      <div class="association-row">
+        <label for="code2">Player 2</label>
+        <input id="code2" name="association_code" type="text" placeholder="Association code"
+               value="{{ player2_code|default:'' }}"
+               {% if player2_device %}readonly{% endif %}>
+        <button type="submit">
+          {% if player2_device %}✓ Added{% else %}Add{% endif %}
+        </button>
+      </div>
+      {% if form2.errors %}
+        <div class="form-error">{{ form2.association_code.errors }}</div>
+      {% endif %}
+    </form>
+
+
+
     <div>
       <h3 style="margin: 10px 0 10px; text-align: center;">Level Select</h3>
       <div class="level-select" id="levelSelect">
         <button type="button" class="level-option selected" data-level="1">1</button>
       </div>
     </div>
+
+    <!-- start button only begins when both players are added -->
     <div class="start-button-row">
-      <a href="{% url 'ingame' %}" class="start-link">START</a>
+      <!-- <a href="{% url 'ingame' %}" class="start-link">START</a> -->
+        {% if player1_device and player2_device %}
+            <a href="{% url 'ingame' %}" class="start-link">START</a>
+        {% else %}
+            <span class="start-link disabled" title="Add both players first">START</span>
+        {% endif %}
     </div>
   </div>
 </div>

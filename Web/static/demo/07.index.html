@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LAMPI with MQTT</title>
+  <link rel="stylesheet" href="/css/site.css">
+
+  <!-- Import map for ES modules - allows "import mqtt from 'mqtt'" -->
+  <script type="importmap">
+  {
+    "imports": {
+      "mqtt": "https://unpkg.com/mqtt@5.10.1/dist/mqtt.esm.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- Alpine.js component with x-init to connect on load -->
+  <main x-data="mqttDemo()" x-init="connect()">
+    <div class="labels">
+      <div>
+        Power: <span x-text="isPowered ? 'On' : 'Off'"></span>
+      </div>
+      <div>
+        Brightness: <span x-text="brightness"></span>%
+      </div>
+    </div>
+    <div class="sliders">
+      <input class="slider" type="range" min="0" max="100" step="1"
+             x-model.number="brightness"
+             @input="publishState()">
+      <!-- Display value received from MQTT subscription -->
+      <p style="color: #666; font-size: 0.9em;">
+        MQTT value: <em x-text="subscriptionValue"></em>
+      </p>
+    </div>
+    <div class="colorbox" :style="{ opacity: isPowered ? brightness / 100 : 0 }"></div>
+    <div class="buttons">
+      <button type="button" class="btn btn-default"
+              @click="isPowered = !isPowered; publishState()">
+        Power
+      </button>
+      <!-- Connection status indicator -->
+      <span style="margin-left: 10px; font-size: 0.8em;"
+            :style="{ color: mqttConnected ? 'green' : 'red' }"
+            x-text="mqttConnected ? '● Connected' : '○ Disconnected'">
+      </span>
+    </div>
+  </main>
+
+  <!-- Module script for MQTT setup -->
+  <script type="module">
+    import mqtt from 'mqtt';
+
+    // Configuration - UPDATE WITH YOUR EC2 DNS
+    const HOST = window.location.hostname || 'localhost';
+    const PORT = 50002;
+    const CLIENT_ID = Math.random().toString(36).substring(2) + '_demo';
+
+    /**
+     * Alpine.js component for MQTT demo
+     */
+    function mqttDemo() {
+      return {
+        // Reactive state
+        isPowered: false,
+        brightness: 50,
+        subscriptionValue: 0,
+        mqttConnected: false,
+
+        // Internal
+        client: null,
+
+        /**
+         * Connect to MQTT broker via WebSocket
+         */
+        connect() {
+          const brokerUrl = `ws://${HOST}:${PORT}/`;
+          console.log('Connecting to', brokerUrl);
+
+          this.client = mqtt.connect(brokerUrl, {
+            clientId: CLIENT_ID,
+            clean: true,
+            reconnectPeriod: 1000,
+          });
+
+          // Connection established
+          this.client.on('connect', () => {
+            console.log('MQTT connected');
+            this.mqttConnected = true;
+            // Subscribe to test messages from bin/service.py
+            this.client.subscribe('devices/+/label/changed', { qos: 1 });
+          });
+
+          // Connection closed
+          this.client.on('close', () => {
+            console.log('MQTT disconnected');
+            this.mqttConnected = false;
+          });
+
+          // Error
+          this.client.on('error', (err) => {
+            console.error('MQTT error:', err);
+          });
+
+          // Message received
+          this.client.on('message', (topic, payload) => {
+            console.log('Received:', topic, payload.toString());
+            try {
+              const msg = JSON.parse(payload.toString());
+              if (msg.value !== undefined) {
+                this.subscriptionValue = msg.value;
+              }
+            } catch (e) {
+              console.error('Parse error:', e);
+            }
+          });
+        },
+
+        /**
+         * Publish current state to MQTT
+         */
+        publishState() {
+          if (!this.client || !this.mqttConnected) return;
+
+          const state = {
+            isPowered: this.isPowered,
+            brightness: this.brightness,
+            client: CLIENT_ID,
+          };
+
+          const topic = 'devices/DEMO/lamp/set_config';
+          console.log('Publishing:', topic, state);
+          this.client.publish(topic, JSON.stringify(state), { qos: 1 });
+        },
+      };
+    }
+
+    // Register component with Alpine.js
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('mqttDemo', mqttDemo);
+    });
+  </script>
+
+  <!-- Alpine.js - defer ensures DOM is ready -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
+</body>
+</html>

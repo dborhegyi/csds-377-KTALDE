@@ -100,6 +100,27 @@ function lampController() {
     },
 
     // ========================================================================
+    // Lamp Control Methods
+    // ========================================================================
+
+    updateLamp() {
+      if (!this.client || !this.mqttConnected) return;
+      const config = {
+        on: this.on,
+        color: { h: this.hue, s: this.saturation },
+        brightness: this.brightness,
+        client: CLIENT_ID
+      };
+      this.client.publish(CONFIG.topics.setConfig, JSON.stringify(config), { qos: 1 });
+    },
+
+    submitPuzzle() {
+      if (!this.client || !this.mqttConnected) return;
+      const payload = { h: this.hue, s: this.saturation, b: this.brightness };
+      this.client.publish(CONFIG.topics.pubOnePuzzleState, JSON.stringify(payload), { qos: 1 });
+    },
+
+    // ========================================================================
     // MQTT Connection Methods
     // ========================================================================
 

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LAMPI with Alpine.js - Full Reactivity</title>
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+  <!-- All reactive state defined in x-data -->
+  <main x-data="{ isPowered: false, brightness: 50 }">
+    <div class="labels">
+      <div>
+        Power: <span x-text="isPowered ? 'On' : 'Off'"></span>
+      </div>
+      <div>
+        <!-- brightness updates automatically when slider moves -->
+        Brightness: <span x-text="brightness"></span>%
+      </div>
+    </div>
+    <div class="sliders">
+      <!-- x-model creates two-way binding between slider and brightness -->
+      <!-- .number modifier ensures value is treated as a number -->
+      <input class="slider" type="range" min="0" max="100" step="1"
+             x-model.number="brightness">
+    </div>
+    <!-- :style binds CSS properties to reactive state -->
+    <div class="colorbox" :style="{ opacity: isPowered ? brightness / 100 : 0 }"></div>
+    <div class="buttons">
+      <button type="button" class="btn btn-default" @click="isPowered = !isPowered">
+        Power
+      </button>
+    </div>
+  </main>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
+</body>
+</html>

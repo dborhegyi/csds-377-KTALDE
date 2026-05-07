@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LAMPI with Flexbox Layout</title>
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+  <!-- Flexbox layout: body is flex container, main is centered -->
+  <main>
+    <!-- .labels uses justify-content: space-evenly -->
+    <div class="labels">
+      <div>
+        Power: <span id="powerState">Off</span>
+      </div>
+      <div>
+        Brightness: <span id="brightnessValue">50</span>%
+      </div>
+    </div>
+    <!-- .sliders uses flex-direction: column, align-items: center -->
+    <div class="sliders">
+      <input id="brightness" class="slider" type="range" min="0" max="100" step="1">
+    </div>
+    <div class="colorbox"></div>
+    <div class="buttons">
+      <button id="power" type="button" class="btn btn-default">Power</button>
+    </div>
+  </main>
+</body>
+</html>
