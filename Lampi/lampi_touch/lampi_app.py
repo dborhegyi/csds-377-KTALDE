@@ -267,13 +267,13 @@ class LampiApp(App):
         self.mqtt.subscribe(TOPIC_INCOMING_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), qos=1)
         self.mqtt.message_callback_add(TOPIC_GAME_STARTED.replace("{{device_id}}", get_device_id()), self.receive_game_started)
         #self.mqtt.subscribe(TOPIC_GAME_STARTED.replace("{{device_id}}", get_device_id()), qos=1)
-        self.mqtt.message_callback_add("game1/state", self.receive_game_state),
-        self.mqtt.message_callback_add("game1/started", self.receive_game_started),
-        self.mqtt.subscribe("game1/lamp1/#"),
-        self.mqtt.subscribe("game1/started", qos=1),
-        self.mqtt.subscribe("game1/lamp1/winGame"),
-        self.mqtt.subscribe("game1/state/explosion")
+        self.mqtt.message_callback_add("game1/state", self.receive_game_state)
+        self.mqtt.message_callback_add("game1/started", self.receive_game_started)
         self.mqtt.message_callback_add("game1/state/explosion", self.lose_sequence.run())
+        self.mqtt.subscribe("game1/lamp1/#")
+        self.mqtt.subscribe("game1/started", qos=1)
+        self.mqtt.subscribe("game1/lamp1/winGame")
+        self.mqtt.subscribe("game1/state/explosion")
         self.mqtt.message_callback_add("game1/lamp1/winGame", self.run_win_sequence),
 
     def _poll_associated(self, dt):
