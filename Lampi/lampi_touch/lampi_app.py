@@ -304,16 +304,19 @@ class LampiApp(App):
         if not hasattr(self, 'puzzle_handler'):
             return
         result = self.puzzle_handler.solve_wire_puzzle(position)
-        if result == 1:
-            self.update_puzzle_state(0, 'S', False)  # Temporarily disable publish to avoid crash
-        else:
-            self.update_puzzle_state(0, 'F', False)
-        # Update the UI to show the cut wire
         screen = self.root.current_screen
         if hasattr(screen, 'ids') and f'wire_{position}' in screen.ids:
             wire_button = screen.ids[f'wire_{position}']
             wire_button.background_normal = wire_button.background_down
         time.sleep(1)
+        if result == 1:
+            self.update_puzzle_state(0, 'S', False)  # Temporarily disable publish to avoid crash
+            self.go_to_success_screen()
+        else:
+            self.update_puzzle_state(0, 'F', False)
+        # Update the UI to show the cut wire
+        
+
 
 
 
