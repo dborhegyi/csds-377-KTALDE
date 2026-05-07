@@ -65,6 +65,10 @@ function lampController() {
     // Computed Properties (Getters)
     // ========================================================================
 
+    init(){
+      this.connect();
+    }
+
     get colorBoxColor() {
       return hsbToHex(this.hue * 360, this.saturation, 1.0);
     },
@@ -116,7 +120,9 @@ function lampController() {
 
     //GOOD, REAL TOPIC!!!
     startGame() {
+      print("statement ran!");
       if (!this.client || !this.mqttConnected) return;
+      print("mqtt is connected!");
       this.client.publish("devices/b827eb41788e/game/started","started", { qos: 1});
 
     },
