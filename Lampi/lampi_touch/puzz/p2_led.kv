@@ -31,7 +31,7 @@
                 size_hint_y: 0.33
                 colors: red, yellow, green, cyan, blue, magenta, red
                 value: app.color_value
-                on_value: app.color_value = self.value_normalized
+                on_value: app.color_value = Math.round(self.value_normalized * 10) / 10
             Button:
                 text: "Submit Answer!"
                 font_size: "17sp"
