@@ -30,7 +30,7 @@ class WinningSequence:
 
     def stop(self):
         # Turn off all LEDs before exiting
-        pi1.write(blue, 0)
-        pi1.write(red, 0)
-        pi1.write(green,0)
-        pi1.stop()
+        self.pi1.write(blue, 0)
+        self.pi1.write(red, 0)
+        self.pi1.write(green,0)
+        self.pi1.stop()

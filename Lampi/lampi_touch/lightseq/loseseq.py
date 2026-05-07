@@ -3,6 +3,7 @@ import time
 
 class LosingSequence:
     def __init__(self):
+        self.pi1 = pigpio.pi()
         self.pi1.write(blue, 0)
         self.pi1.write(red, 0)
         self.pi1.write(green,0)
