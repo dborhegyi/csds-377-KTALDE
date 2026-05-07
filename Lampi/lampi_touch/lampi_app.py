@@ -402,11 +402,19 @@ class LampiApp(App):
     def receive_game_started(self, client: Client, userdata: Any,
                              message: mqtt.MQTTMessage) -> None:
         gameRan = "YES IT DID!!"
-        Clock.schedule_once(lambda dt: self.start_game(), 0.01)
+        try:
+            print(f"receive_game_started called with payload: {message.payload}")
+            Clock.schedule_once(lambda dt: self.start_game(), 0.01)
+        except Exception as e:
+            print(f"ERROR in receive_game_started: {e}")
 
     def start_game(self):
-        self.game_started = True
-        self.go_to_puzzles()
+        try:
+            print("start_game called")
+            self.game_started = True
+            self.go_to_puzzles()
+        except Exception as e:
+            print(f"ERROR in start_game: {e}")
         # self.initialize_states()
         # # Generate wire puzzle layout
         # self.puzzle_handler.wire_puzzle_config()
