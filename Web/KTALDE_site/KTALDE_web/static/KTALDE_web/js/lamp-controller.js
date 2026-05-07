@@ -129,8 +129,8 @@ function lampController() {
       console.log("statement ran!");
       if (!this.client || !this.mqttConnected) return;
       console.log("mqtt is connected!");
-      this.client.publish("game1/started","started", { qos: 0});
-      this.client.publish("game1/started","started", { qos: 0});
+      this.client.publish("game1/started","started", { qos: 1});
+      this.client.publish("game1/started","started", { qos: 1});
       //this.client.publish("game1/lamp1/started","started", { qos: 0});
 
     },
