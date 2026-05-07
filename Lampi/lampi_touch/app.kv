@@ -7,6 +7,7 @@
 #:include lampi_touch/puzz/p1_wires.kv
 #:include lampi_touch/puzz/p6_wires.kv
 #:include lampi_touch/solved.kv
+#:include lampi_touch/notsolved.kv
 
 ScreenManager:
     transition: NoTransition()
@@ -26,3 +27,5 @@ ScreenManager:
         name: 'p6wires'
     SolvedScreen:
         name: 'solved'
+    NotSolvedScreen:
+        name: 'notsolved'
