@@ -16,15 +16,15 @@ class WinningSequence:
         }
         self.client.publish("lamp/set_config", json.dumps(msg), qos=1)
 
-    def run(self):
+    def run(self, duration=2.0):
+        end_time = time.time() + duration
         try:
-            while True:
+            while time.time() < end_time:
                 self._set_color(0, 0, 0, on=False)
                 time.sleep(0.25)
-                # Flash green (hue ~0.33)
                 self._set_color(0.33, 1.0, 1.0, on=True)
                 time.sleep(0.5)
-        except KeyboardInterrupt:
+        finally:
             self.stop()
 
     def stop(self):

@@ -15,6 +15,7 @@ from kivy.uix.label import Label
 import paho.mqtt.client as mqtt
 from paho.mqtt.client import Client, CallbackAPIVersion
 import time
+import threading
 
 import lampi_touch.lightseq.winseq
 import lampi_touch.lightseq.loseseq
@@ -310,25 +311,33 @@ class LampiApp(App):
     def reset_puzzle_state(self, puzzle_index: int):
         self.update_puzzle_state(puzzle_index, 'N', True)
 
+    def _run_win_sequence(self):
+        self.win_sequence.run()
+
+    def _run_lose_sequence(self):
+        self.lose_sequence.run()
+
 
     def on_cut_wire(self, position: int) -> None:
         if not hasattr(self, 'puzzle_handler'):
             return
         result = self.puzzle_handler.solve_wire_puzzle(position)
+
+        # Update wire visual immediately
         screen = self.root.current_screen
         if hasattr(screen, 'ids') and f'wire_{position}' in screen.ids:
             wire_button = screen.ids[f'wire_{position}']
             wire_button.background_normal = wire_button.background_down
+
         if result == 1:
             self.current_puzzle_state[0] = 'S'
             Clock.schedule_once(lambda dt: self.go_to_success_screen(), 0.5)
-            self.win_sequence.run()
-            Clock.schedule_once(lambda dt: self.win_sequence.stop(), 2)
+            t = threading.Thread(target=self._run_win_sequence, daemon=True)
+            t.start()
         else:
             self.current_puzzle_state[0] = 'F'
-            self.lose_sequence.run()
-            Clock.schedule_once(lambda dt: self.lose_sequence.stop(), 2)
-        # Update the UI to show the cut wire
+            t = threading.Thread(target=self._run_lose_sequence, daemon=True)
+            t.start()
         
 
 
