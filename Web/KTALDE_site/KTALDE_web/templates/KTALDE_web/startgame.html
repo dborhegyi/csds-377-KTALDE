@@ -159,12 +159,7 @@
 
     <!-- start button only begins when both players are added -->
     <div class="start-button-row">
-      <!-- <a href="{% url 'ingame' %}" class="start-link">START</a> -->
-        {% if player1_device and player2_device %}
-            <a href="{% url 'ingame' %}" class="start-link">START</a>
-        {% else %}
-            <span class="start-link disabled" title="Add both players first">START</span>
-        {% endif %}
+      <a href="{% url 'ingame' %}" class="start-link">START</a>
     </div>
   </div>
 </div>
