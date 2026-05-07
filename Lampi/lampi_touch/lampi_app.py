@@ -6,7 +6,7 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import NumericProperty, AliasProperty, BooleanProperty, ColorProperty, StringProperty, ListProperty
-from lampi_touch.lamp_driver import LampDriver
+#from lampi_touch.lamp_driver import LampDriver
 
 from kivy.properties import NumericProperty, AliasProperty, BooleanProperty
 from kivy.clock import Clock
