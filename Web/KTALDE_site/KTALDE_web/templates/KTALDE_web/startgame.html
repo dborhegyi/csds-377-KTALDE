@@ -162,7 +162,7 @@
     <div class="start-button-row">
         <a href="{% url 'ingame' %}" 
            class="start-link" 
-           @click.prevent="startGame(); window.location.href='{% url 'ingame' %}'">
+           @click.prevent="startGame(); setTimeout(() => window.location.href='{% url 'ingame' %}', 300)">
             START
         </a>
     </div>

@@ -120,9 +120,9 @@ function lampController() {
 
     //GOOD, REAL TOPIC!!!
     startGame() {
-      print("statement ran!");
+      console.log("statement ran!");
       if (!this.client || !this.mqttConnected) return;
-      print("mqtt is connected!");
+      console.log("mqtt is connected!");
       this.client.publish("devices/b827eb41788e/game/started","started", { qos: 1});
 
     },
