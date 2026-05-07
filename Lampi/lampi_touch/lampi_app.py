@@ -329,7 +329,7 @@ class LampiApp(App):
         for value in self.current_puzzle_state:
             if not value == 'S':
                 return;
-        self.mqtt.publish("game1/lampi1/success", "win")
+        self.mqtt.publish("game1/lamp1/success", "win")
 
 
     def run_lose_sequence(self):

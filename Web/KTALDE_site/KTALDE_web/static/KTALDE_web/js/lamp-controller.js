@@ -191,6 +191,12 @@ function lampController() {
           }
         });
 
+        this.client.subscribe("game1/state/explode", (err) => {
+          if (err) {
+            console.error('Failed to subscribe to lamp_ui state:', err);
+          }
+        });
+
       });
 
       this.client.on('message', (topic, payload) => {
