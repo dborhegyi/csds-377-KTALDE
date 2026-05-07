@@ -196,6 +196,7 @@ class LampiApp(App):
         self.mqtt.on_connect = self.on_connect
         self.mqtt.connect(MQTT_BROKER_HOST, port=MQTT_BROKER_PORT,
                           keepalive=MQTT_BROKER_KEEP_ALIVE_SECS)
+        self.mqtt.publish('lamp/start', 'we ran')
         self.mqtt.loop_start()
         self.set_up_gpio_and_network_status_popup()
         self.associated_status_popup = self._build_associated_status_popup()
