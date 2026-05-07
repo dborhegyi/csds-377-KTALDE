@@ -16,6 +16,8 @@ import paho.mqtt.client as mqtt
 from paho.mqtt.client import Client, CallbackAPIVersion
 import time
 
+import lightseq
+
 from lamp_common import *
 import lampi_touch.lampi_util
 import lampi_touch.puzzles
@@ -114,8 +116,7 @@ class LampiApp(App):
     def go_to_success_screen(self):
         self.root.current = 'solved'
         #they get two seconds to look at the success screen lol!
-        time.sleep(2)
-        self.go_to_puzzles()
+        Clock.schedule_once(lambda dt: self.go_to_puzzles(), 2)
 
     # all the puzzles
     def go_to_p1wires(self):
@@ -168,6 +169,8 @@ class LampiApp(App):
         #self.association_code: Optional[str] = None
         self.initialize_states()
         self.puzzle_handler = lampi_touch.puzzles.Puzzle_Handler()
+        self.win_sequence = lightseq.winseq.WinningSequence()
+        self.lose_sequence = lightseq.loseseq.LosingSequence()
         self.mqtt: Client = Client(
             callback_api_version=CallbackAPIVersion.VERSION2,
             client_id=MQTT_CLIENT_ID
@@ -220,7 +223,7 @@ class LampiApp(App):
                 lambda dt: self._update_leds(), MQTT_PUBLISH_THROTTLE_SECS)
     
     def submit_partner_puzzle(self):
-        payload = {'h': self.hue, 's': self.saturation, 'b': self.brightness}
+        payload = {'h': self.hue, 's': 1.0, 'b': 1.0}
         topic = f"game/{get_device_id()}/puzzleState/sent"
         self.mqtt.publish(topic, json.dumps(payload), qos=1)
 
@@ -279,10 +282,10 @@ class LampiApp(App):
     def publish_puzzle_state(self):
         self.mqtt.publish(TOPIC_OUTGOING_PUZZLE_STATE_1, self.current_puzzle_state, qos=1)
     
-    def publish_partner_puzzle_state(self, information):
-        TOPIC_PARTNER_PUZZLE_STATE.replace("{{device_id}}", get_device_id())
-        self.mqtt.publish(TOPIC_PARTNER_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), information, qos=1)
-        return
+    # def publish_partner_puzzle_state(self, information):
+    #     TOPIC_PARTNER_PUZZLE_STATE.replace("{{device_id}}", get_device_id())
+    #     self.mqtt.publish(TOPIC_PARTNER_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), information, qos=1)
+    #     return
 
     # Updates the puzzle state at index to given state
     # Publishes new state to mqtt (evaluate logic later)
@@ -308,12 +311,15 @@ class LampiApp(App):
         if hasattr(screen, 'ids') and f'wire_{position}' in screen.ids:
             wire_button = screen.ids[f'wire_{position}']
             wire_button.background_normal = wire_button.background_down
-        time.sleep(1)
         if result == 1:
-            self.update_puzzle_state(0, 'S', False)  # Temporarily disable publish to avoid crash
-            self.go_to_success_screen()
+            self.current_puzzle_state[0] = 'S'
+            Clock.schedule_once(lambda dt: self.go_to_success_screen(), 0.5)
+            self.win_sequence.run()
+            Clock.schedule_once(lambda dt: self.win_sequence.stop(), 2)
         else:
-            self.update_puzzle_state(0, 'F', False)
+            self.current_puzzle_state[0] = 'F'
+            self.lose_sequence.run()
+            Clock.schedule_once(lambda dt: self.lose_sequence.stop(), 2)
         # Update the UI to show the cut wire
         
 
@@ -391,6 +397,7 @@ class LampiApp(App):
 
     def explode():
         #run through explosion sequence.
+        
         pass
 
     def receive_game_state(self, client: Client, userdata: Any,
