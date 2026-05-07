@@ -62,6 +62,9 @@ class SolvedScreen(Screen):
 class NotSolvedScreen(Screen):
     pass
 
+class GameOver(Screen):
+    pass
+
 class P1WiresScreen(Screen):
     def on_enter(self):
         app = App.get_running_app()
@@ -122,6 +125,9 @@ class LampiApp(App):
         self.root.current = 'solved'
         #they get two seconds to look at the success screen lol!
         Clock.schedule_once(lambda dt: self.go_to_puzzles(), 2)
+
+    def go_to_game_over(self):
+        self.root.current = 'gameOver'
 
     def go_to_unsuccess_screen(self):
         self.root.current = 'unsolved'
@@ -336,6 +342,7 @@ class LampiApp(App):
             t.start()
         else:
             self.current_puzzle_state[0] = 'F'
+            self.go_to_game_over()
             t = threading.Thread(target=self._run_lose_sequence, daemon=True)
             t.start()
         
