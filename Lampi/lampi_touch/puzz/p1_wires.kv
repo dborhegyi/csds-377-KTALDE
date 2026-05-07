@@ -17,9 +17,8 @@
             pos_hint: {'center_x': 0.14, 'center_y': 0.5}
             allow_stretch: True
             keep_ratio: True
-            on_press:
+            on_press: 
                 app.on_cut_wire(0)
-                background_normal = background_down
                 
 
         # blue wire
@@ -32,7 +31,6 @@
             keep_ratio: True
             on_press: 
                 app.on_cut_wire(1)
-                background_normal = background_down
 
         # green wire
         Button:
@@ -44,7 +42,6 @@
             keep_ratio: True
             on_press: 
                 app.on_cut_wire(2)
-                background_normal = background_down
 
         # orange wire
         Button:
@@ -56,7 +53,6 @@
             keep_ratio: True
             on_press: 
                 app.on_cut_wire(3)
-                background_normal = background_down
 
         Widget:
             size_hint: 1, 0.15
