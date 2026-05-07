@@ -122,7 +122,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="start-page">
+<div class="start-page" x-data="lampController()" x-init="connect()">
   <h2>Add Puzzle Solver</h2>
   <div class="start-container">
     <form method="post" action="{% url 'startgame' %}">
@@ -160,7 +160,11 @@
 
     <!-- start button only begins when both players are added -->
     <div class="start-button-row">
-      <a href="{% url 'ingame' %}" class="start-link" onclick="startGame()">START</a>
+        <a href="{% url 'ingame' %}" 
+           class="start-link" 
+           @click.prevent="startGame(); window.location.href='{% url 'ingame' %}'">
+            START
+        </a>
     </div>
   </div>
 </div>
