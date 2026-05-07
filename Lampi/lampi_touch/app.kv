@@ -8,6 +8,7 @@
 #:include lampi_touch/puzz/p6_wires.kv
 #:include lampi_touch/solved.kv
 #:include lampi_touch/notsolved.kv
+#:include lampi_touch/gameOver.kv
 
 ScreenManager:
     transition: NoTransition()
@@ -29,3 +30,5 @@ ScreenManager:
         name: 'solved'
     NotSolvedScreen:
         name: 'notsolved'
+    GameOver:
+        name: 'gameOver'
