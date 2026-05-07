@@ -32,8 +32,6 @@ MQTT_PUBLISH_THROTTLE_SECS = 0.05
 
 TOPIC_OUTGOING_PUZZLE_STATE_1 = "game/device1/puzzleState/received"
 
-MQTT_CLIENT_ID = "lamp_ui"
-
 DEVICE_NUMBER = 1
 
 # TODO: New python file imported and called for specific puzzle handling :)
