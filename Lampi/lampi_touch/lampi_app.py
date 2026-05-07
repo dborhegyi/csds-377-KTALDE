@@ -295,11 +295,6 @@ class LampiApp(App):
         if hasattr(screen, 'ids') and f'wire_{position}' in screen.ids:
             wire_button = screen.ids[f'wire_{position}']
             wire_button.background_normal = wire_button.background_down
-        # Update the UI to show the cut wire
-        screen = self.root.current_screen
-        if hasattr(screen, 'ids') and f'wire_{position}' in screen.ids:
-            wire_button = screen.ids[f'wire_{position}']
-            wire_button.background_normal = wire_button.background_down
 
     def on_led_puzzle_solve(self, sliderValue: float):
         ##this would be the single player puzzle solve...
