@@ -13,57 +13,57 @@
             Color:
             rgba: offwhite
             Rectangle:
-            pos: self.pos
-            size: self.size
-        orientation: 'vertical'
-        BoxLayout:
+                pos: self.pos
+                size: self.size
             orientation: 'vertical'
-            padding: 30
-            size_hint_y: 0.66
-            #Label for slider
-            Label:
-                    text: app.color_value
-                    color: black
+            BoxLayout:
+                orientation: 'vertical'
+                padding: 30
+                size_hint_y: 0.66
+                #Label for slider
+                Label:
+                        text: app.color_value
+                        color: black
+                        font_size: "14sp"
+                        size_hint: 0.9, 0.2
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.2}
+                        halign: 'center'
+                #SLIDER
+                GradientSlider:
+                id: color_slider
+                size_hint_y: 0.33
+                colors: red, yellow, green, cyan, blue, magenta, red
+                value: app.color_value
+                on_value: app.color_value = self.value_normalized
+                Button:
+                        text: "Submit Answer!"
+                        font_size: "17sp"
+                        background_color: (0,0,0,0)
+                        size_hint_x: 0.5
+                        size_hint_y: 0.2
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.3}
+                Button:
+                    text: "Submit"
                     font_size: "14sp"
-                    size_hint: 0.9, 0.2
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.2}
-                    halign: 'center'
-            #SLIDER
-            GradientSlider:
-            id: color_slider
-            size_hint_y: 0.33
-            colors: red, yellow, green, cyan, blue, magenta, red
-            value: app.color_value
-            on_value: app.color_value = self.value_normalized
-            Button:
-                    text: "Submit Answer!"
-                    font_size: "17sp"
                     background_color: (0,0,0,0)
-                    size_hint_x: 0.5
-                    size_hint_y: 0.2
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.3}
-            Button:
-                text: "Submit"
-                font_size: "14sp"
-                background_color: (0,0,0,0)
-                size_hint_x: 0.30
-                size_hint_y: 0.15
-                pos_hint: {'center_x': 0.5, 'center_y': 0.05}
+                    size_hint_x: 0.30
+                    size_hint_y: 0.15
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.05}
 
-                canvas.before:
-                    # black outline
-                    Color:
-                        rgba: 0, 0, 0, 1
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [0]
+                    canvas.before:
+                        # black outline
+                        Color:
+                            rgba: 0, 0, 0, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [0]
 
-                    # green background
-                    Color:
-                        rgba: 0.0, 0.8, 0.0, 1
-                    RoundedRectangle:
-                        pos: self.x + 3, self.y + 3
-                        size: self.width - 6, self.height - 6
-                        radius: [0]
-                on_press: app.submit_partner_puzzle()
+                        # green background
+                        Color:
+                            rgba: 0.0, 0.8, 0.0, 1
+                        RoundedRectangle:
+                            pos: self.x + 3, self.y + 3
+                            size: self.width - 6, self.height - 6
+                            radius: [0]
+                    on_press: app.submit_partner_puzzle()
