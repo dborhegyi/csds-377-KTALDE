@@ -142,10 +142,12 @@ class LampiApp(App):
         self.puzzle_handler.wire_puzzle_config()
         self.root.current = 'p1wires'
 
-    # def go_to_p6wires(self):
-    #     self.root.current = 'p6wires'
-    # def build(self):
-    #     return Builder.load_file("lampi_touch/app.kv")
+    def go_to_p6wires(self):
+        return
+        self.root.current = 'p6wires'
+
+    def build(self):
+        return Builder.load_file("lampi_touch/app.kv")
     # ==============================
 
     def _get_hue(self) -> float:
