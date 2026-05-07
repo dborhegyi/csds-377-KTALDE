@@ -110,14 +110,6 @@
                     size: self.width - 6, self.height - 6
                     radius: [0]
         
-        Label:
-            text: "DID THIS RUN?" + (app.gameRan if app.gameRan else "No it did not...")
-            color: black
-            font_size: "14sp"
-            size_hint: 0.9, 0.2
-            pos_hint: {'center_x': 0.5, 'center_y': 0.2}
-            halign: 'center'
-        #make a submit button that calls app.submit_puzzle()
 
         Button:
             text: "Submit Partner Puzzle"

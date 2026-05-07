@@ -16,6 +16,8 @@ import paho.mqtt.client as mqtt
 from paho.mqtt.client import Client, CallbackAPIVersion
 import time
 
+import lightseq
+
 from lamp_common import *
 import lampi_touch.lampi_util
 import lampi_touch.puzzles
@@ -167,6 +169,8 @@ class LampiApp(App):
         #self.association_code: Optional[str] = None
         self.initialize_states()
         self.puzzle_handler = lampi_touch.puzzles.Puzzle_Handler()
+        self.win_sequence = lightseq.winseq.WinningSequence()
+        self.lose_sequence = lightseq.loseseq.LosingSequence()
         self.mqtt: Client = Client(
             callback_api_version=CallbackAPIVersion.VERSION2,
             client_id=MQTT_CLIENT_ID
@@ -310,8 +314,12 @@ class LampiApp(App):
         if result == 1:
             self.current_puzzle_state[0] = 'S'
             Clock.schedule_once(lambda dt: self.go_to_success_screen(), 0.5)
+            self.win_sequence.run()
+            Clock.schedule_once(lambda dt: self.win_sequence.stop(), 2)
         else:
             self.current_puzzle_state[0] = 'F'
+            self.lose_sequence.run()
+            Clock.schedule_once(lambda dt: self.lose_sequence.stop(), 2)
         # Update the UI to show the cut wire
         
 
@@ -389,6 +397,7 @@ class LampiApp(App):
 
     def explode():
         #run through explosion sequence.
+        
         pass
 
     def receive_game_state(self, client: Client, userdata: Any,
