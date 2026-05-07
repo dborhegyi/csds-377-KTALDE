@@ -64,6 +64,9 @@ function lampController() {
     hasReceivedDevice1Solve: false,
     hasReceivedDevice2Solve: false,
 
+    device1Finished: false,
+    device2Finished: false,
+
     // ========================================================================
     // Computed Properties (Getters)
     // ========================================================================
@@ -218,6 +221,26 @@ function lampController() {
       
     },
 
+    checkPartnerGameWon() {
+      if(!this.hasReceivedDevice1Solve){
+        return false;
+      }
+      if(!this.hasReceivedDevice2Solve){
+        return false;
+      }
+      return true;
+    },
+
+    checkGameWon() {
+      if(!this.device1Finished){
+        return false;
+      }
+      if(!this.device2Finished){
+        return false;
+      }
+      return true;
+    },
+
     // ========================================================================
     // MQTT Message Handlers
     // ========================================================================
@@ -234,6 +257,39 @@ function lampController() {
         this.onStateMessageArrived(payloadString);
         return;
        }
+
+      if (topic === "game1/state/explode"){
+        window.location.href = "http://ec2-32-194-170-233.compute-1.amazonaws.com:8000/gameover.html/";
+        return;
+      }
+
+      if (topic === "game1/lamp1/submit"){
+        this.hasReceivedDevice1Solve = true;
+        if (!this.checkPartnerGameWon()){
+          return;
+        }
+        this.mqtt.publish("game1/lamp1/winGame")
+        this.mqtt.publish("game1/lamp2/winGame")
+      }
+
+
+      if (topic === "game1/lamp1/success"){
+        this.device1Finished = true;
+        if (!this.checkGameWon()){
+          return;
+        }
+        window.location.href = "http://ec2-32-194-170-233.compute-1.amazonaws.com:8000/win.html/";
+        return;
+      }
+
+      if (topic === "game1/lamp2/success"){
+        this.device2Finished = true;
+        if (!this.checkGameWon()){
+          return;
+        }
+        window.location.href = "http://ec2-32-194-170-233.compute-1.amazonaws.com:8000/win.html/";
+        return;
+      }
 
 
       // Parse JSON for other messages
