@@ -58,6 +58,9 @@ class PuzzlesScreen(Screen):
 class SolvedScreen(Screen):
     pass
 
+class NotSolvedScreen(Screen):
+    pass
+
 class P1WiresScreen(Screen):
     def on_enter(self):
         app = App.get_running_app()
@@ -117,6 +120,10 @@ class LampiApp(App):
     def go_to_success_screen(self):
         self.root.current = 'solved'
         #they get two seconds to look at the success screen lol!
+        Clock.schedule_once(lambda dt: self.go_to_puzzles(), 2)
+
+    def go_to_unsuccess_screen(self):
+        self.root.current = 'unsolved'
         Clock.schedule_once(lambda dt: self.go_to_puzzles(), 2)
 
     # all the puzzles
