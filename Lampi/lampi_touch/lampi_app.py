@@ -285,7 +285,6 @@ class LampiApp(App):
     def on_cut_wire(self, position: int) -> None:
         if not hasattr(self, 'puzzle_handler'):
             return
-        time.sleep(2)
         result = self.puzzle_handler.solve_wire_puzzle(position)
         if result == 1:
             self.update_puzzle_state(0, 'S', True)
