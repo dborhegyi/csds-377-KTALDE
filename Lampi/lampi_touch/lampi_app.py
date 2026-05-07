@@ -55,16 +55,15 @@ class PuzzlesScreen(Screen):
 class P1WiresScreen(Screen):
     def on_enter(self):
         app = App.get_running_app()
-        if 1 in app.puzzle_handler.puzzle_layouts:
-            wires = app.puzzle_handler.puzzle_layouts[0][2]
-            for i in range(4):
-                wire_num = wires[i]
-                color_code = {1: 'r', 4: 'g', 7: 'b', 10: 'o'}[((wire_num - 1) // 3) * 3 + 1]
-                type_code = {1: 's', 2: 'w', 3: 'z'}[(wire_num - 1) % 3 + 1]
-                normal = f'images/p1_wire_images/p1{color_code}{type_code}.png'
-                down = f'images/p1_wire_images/p1{color_code}{type_code}c.png'
-                self.ids[f'wire_{i}'].background_normal = normal
-                self.ids[f'wire_{i}'].background_down = down
+        wires = app.puzzle_handler.puzzle_layouts[0][2]
+        for i in range(4):
+            wire_num = wires[i]
+            color_code = {1: 'r', 4: 'g', 7: 'b', 10: 'o'}[((wire_num - 1) // 3) * 3 + 1]
+            type_code = {1: 's', 2: 'w', 3: 'z'}[(wire_num - 1) % 3 + 1]
+            normal = f'images/p1_wire_images/p1{color_code}{type_code}.png'
+            down = f'images/p1_wire_images/p1{color_code}{type_code}c.png'
+            self.ids[f'wire_{i}'].background_normal = normal
+            self.ids[f'wire_{i}'].background_down = down
 
 class P6WiresScreen(Screen):
     def on_enter(self):
