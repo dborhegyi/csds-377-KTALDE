@@ -51,28 +51,28 @@
             allow_stretch: True
             keep_ratio: True
 
-        Button:
-            text: "Puzzles"
-            font_size: "12sp"
-            background_color: (0,0,0,0)
-            size_hint_x: 0.3
-            size_hint_y: 0.1
-            pos_hint: {'center_x': 0.2, 'center_y': 0.2}
+        # Button:
+        #     text: "Puzzles"
+        #     font_size: "12sp"
+        #     background_color: (0,0,0,0)
+        #     size_hint_x: 0.3
+        #     size_hint_y: 0.1
+        #     pos_hint: {'center_x': 0.2, 'center_y': 0.2}
 
-            canvas.before:
-                # black outline
-                Color:
-                    rgba: 0, 0, 0, 1
-                RoundedRectangle:
-                    pos: self.pos
-                    size: self.size
-                    radius: [20]
+        #     canvas.before:
+        #         # black outline
+        #         Color:
+        #             rgba: 0, 0, 0, 1
+        #         RoundedRectangle:
+        #             pos: self.pos
+        #             size: self.size
+        #             radius: [20]
 
-                # blue background
-                Color:
-                    rgba: 0.13, 0.59, 0.95, 1
-                RoundedRectangle:
-                    pos: self.x + 3, self.y + 3
-                    size: self.width - 6, self.height - 6
-                    radius: [18]
-            on_press: app.go_to_puzzles()
+        #         # blue background
+        #         Color:
+        #             rgba: 0.13, 0.59, 0.95, 1
+        #         RoundedRectangle:
+        #             pos: self.x + 3, self.y + 3
+        #             size: self.width - 6, self.height - 6
+        #             radius: [18]
+        #     on_press: app.go_to_puzzles()

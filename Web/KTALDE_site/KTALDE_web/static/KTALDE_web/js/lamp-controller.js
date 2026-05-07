@@ -61,6 +61,9 @@ function lampController() {
     updateTimer: null,
     hasReceivedInitialState: false,
 
+    hasReceivedDevice1Solve: false,
+    hasReceivedDevice2Solve: false,
+
     // ========================================================================
     // Computed Properties (Getters)
     // ========================================================================
@@ -131,6 +134,16 @@ function lampController() {
       if (!this.client || !this.mqttConnected) return;
       const payload = { h: this.hue, s: this.saturation, b: this.brightness };
       this.client.publish(CONFIG.topics.pubOnePuzzleState, JSON.stringify(payload), { qos: 1 });
+    },
+
+    sendWinStatement(){
+      this.client.publish("game/state", "win")
+    },
+
+    checkSolved(){
+      if(this.hasReceivedDevice1Solve && this.hasReceivedDevice2Solve){
+        this.sendWinStatement()
+      }
     },
 
     // ========================================================================

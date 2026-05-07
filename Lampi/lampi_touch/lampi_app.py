@@ -262,7 +262,7 @@ class LampiApp(App):
         self.mqtt.message_callback_add(TOPIC_GAME_STARTED.replace("{{device_id}}", get_device_id()), self.receive_game_started)
         #self.mqtt.subscribe(TOPIC_GAME_STARTED.replace("{{device_id}}", get_device_id()), qos=1)
         self.mqtt.message_callback_add("game/state", self.receive_game_state)
-        self.mqtt.message_callback_add("gameStarted", self.receive_game_started)
+        self.mqtt.message_callback_add("game/started", self.receive_game_started)
         self.mqtt.subscribe("gameStarted", qos=1)
 
     def _poll_associated(self, dt):
@@ -405,9 +405,10 @@ class LampiApp(App):
 
     def start_game(self):
         self.game_started = True
-        self.initialize_states()
-        # Generate wire puzzle layout
-        self.puzzle_handler.wire_puzzle_config()
+        self.go_to_puzzles()
+        # self.initialize_states()
+        # # Generate wire puzzle layout
+        # self.puzzle_handler.wire_puzzle_config()
 
     
     def update_popup_associated(self, instance):
