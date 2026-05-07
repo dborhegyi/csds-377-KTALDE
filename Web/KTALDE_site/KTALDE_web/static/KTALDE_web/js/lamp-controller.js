@@ -7,8 +7,8 @@
  * Configuration is passed from Django via window.LAMPI_CONFIG
  */
 
-import mqtt from 'mqtt';
-import { hsbToHex, darkenHex } from './color-utils.js';
+// import mqtt from 'mqtt';
+// import { hsbToHex, darkenHex } from './color-utils.js';
 
 // ============================================================================
 // Configuration Constants (from Django)
