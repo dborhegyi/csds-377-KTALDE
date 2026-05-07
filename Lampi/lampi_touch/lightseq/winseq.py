@@ -4,7 +4,7 @@ import time
 # this is the winning sequence that happens if you WIN the game
 # by successfully the solving all of the puzzles in time
 
-class WinningSequence(self):
+class WinningSequence:
     def __init__(self):
         self.pi1 = pigpio.pi()
         self.blue = 13
