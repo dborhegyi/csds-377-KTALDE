@@ -65,6 +65,9 @@ class NotSolvedScreen(Screen):
 class GameOver(Screen):
     pass
 
+class P2LEDScreen(Screen):
+    pass
+
 class P1WiresScreen(Screen):
     def on_enter(self):
         app = App.get_running_app()
@@ -125,6 +128,9 @@ class LampiApp(App):
         self.root.current = 'solved'
         #they get two seconds to look at the success screen lol!
         Clock.schedule_once(lambda dt: self.go_to_puzzles(), 2)
+
+    def go_to_led(self):
+        self.root.current = "p2led"
 
     def go_to_game_over(self):
         self.root.current = 'gameOver'
@@ -239,6 +245,7 @@ class LampiApp(App):
                 lambda dt: self._update_leds(), MQTT_PUBLISH_THROTTLE_SECS)
     
     def submit_partner_puzzle(self):
+
         payload = {'h': self.hue, 's': 1.0, 'b': 1.0}
         topic = f"game/{get_device_id()}/puzzleState/sent"
         self.mqtt.publish(topic, json.dumps(payload), qos=1)
@@ -367,11 +374,13 @@ class LampiApp(App):
         ##this would be the single player puzzle solve...
         if not hasattr(self, 'puzzle_handler'):
             return
-        result = self.puzzle_handler.solve_led_puzzle(sliderValue, DEVICE_NUMBER)
-        if result == 1:
-            self.update_puzzle_state(0, 'S', True)
+        result = self.puzzle_handler.solve_led_puzzle(self.color_value)
+        if result.equals("purple"):
+            self.update_puzzle_state(0, 'S', False)
+            self.mqtt.publish("game1/lamp1/submit","submit")
         else:
-            self.update_puzzle_state(0, 'F', True)
+            self.run_lose_sequence()
+            self.update_puzzle_state(0, 'F', False)
 
     # def on_partner_led_solve(self, color: float, saturation: float, brightness: float):
     #     #publish state onto partner receiving end

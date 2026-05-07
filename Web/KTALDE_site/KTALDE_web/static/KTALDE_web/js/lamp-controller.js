@@ -62,7 +62,7 @@ function lampController() {
     hasReceivedInitialState: false,
 
     hasReceivedDevice1Solve: false,
-    hasReceivedDevice2Solve: false,
+    hasReceivedDevice2Solve: true,
 
     device1Finished: false,
     device2Finished: false,
