@@ -114,8 +114,7 @@ class LampiApp(App):
     def go_to_success_screen(self):
         self.root.current = 'solved'
         #they get two seconds to look at the success screen lol!
-        time.sleep(2)
-        self.go_to_puzzles()
+        Clock.schedule_once(lambda dt: self.go_to_puzzles(), 2)
 
     # all the puzzles
     def go_to_p1wires(self):
@@ -308,10 +307,9 @@ class LampiApp(App):
         if hasattr(screen, 'ids') and f'wire_{position}' in screen.ids:
             wire_button = screen.ids[f'wire_{position}']
             wire_button.background_normal = wire_button.background_down
-        time.sleep(1)
         if result == 1:
-            self.update_puzzle_state(0, 'S', False)  # Temporarily disable publish to avoid crash
-            self.go_to_success_screen()
+            self.update_puzzle_state(0, 'S', False)
+            Clock.schedule_once(lambda dt: self.go_to_success_screen(), 0.5)
         else:
             self.update_puzzle_state(0, 'F', False)
         # Update the UI to show the cut wire
