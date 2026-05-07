@@ -270,7 +270,6 @@ class LampiApp(App):
         self.mqtt.message_callback_add("game1/state", self.receive_game_state)
         self.mqtt.message_callback_add("game1/started", self.receive_game_started)
         self.mqtt.message_callback_add("game1/state/explosion", self.secondary_explode)
-        self.mqtt.subscribe("game1/lamp1/#")
         self.mqtt.subscribe("game1/started", qos=1)
         self.mqtt.subscribe("game1/lamp1/winGame")
         self.mqtt.subscribe("game1/state/explosion")
@@ -360,13 +359,11 @@ class LampiApp(App):
         if result == 1:
             self.current_puzzle_state[0] = 'S'
             Clock.schedule_once(lambda dt: self.go_to_success_screen(), 0.5)
-            t = threading.Thread(target=self.run_win_sequence, daemon=True)
-            t.start()
+            Clock.schedule_once(lambda dt: self.run_win_sequence(), 0)
         else:
             self.current_puzzle_state[0] = 'F'
             self.go_to_game_over()
-            t = threading.Thread(target=self.run_lose_sequence, daemon=True)
-            t.start()
+            Clock.schedule_once(lambda dt: self.run_lose_sequence(), 0)
         
 
 
