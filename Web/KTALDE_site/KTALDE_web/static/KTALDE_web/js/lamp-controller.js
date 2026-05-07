@@ -268,7 +268,7 @@ function lampController() {
        }
 
       if (topic === "game1/state/explode"){
-        this.mqtt.publish("game1/state/explosion")
+        this.client.publish("game1/state/explosion")
         window.location.href = "http://ec2-32-194-170-233.compute-1.amazonaws.com:8000/gameover";
         return;
       }
@@ -278,8 +278,8 @@ function lampController() {
         if (!this.checkPartnerGameWon()){
           return;
         }
-        this.mqtt.publish("game1/lamp1/winGame")
-        this.mqtt.publish("game1/lamp2/winGame")
+        this.client.publish("game1/lamp1/winGame")
+        this.client.publish("game1/lamp2/winGame")
       }
 
 
