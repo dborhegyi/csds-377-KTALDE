@@ -351,12 +351,12 @@ class LampiApp(App):
         if result == 1:
             self.current_puzzle_state[0] = 'S'
             Clock.schedule_once(lambda dt: self.go_to_success_screen(), 0.5)
-            t = threading.Thread(target=self._run_win_sequence, daemon=True)
+            t = threading.Thread(target=self.run_win_sequence, daemon=True)
             t.start()
         else:
             self.current_puzzle_state[0] = 'F'
             self.go_to_game_over()
-            t = threading.Thread(target=self._run_lose_sequence, daemon=True)
+            t = threading.Thread(target=self.run_lose_sequence, daemon=True)
             t.start()
         
 
