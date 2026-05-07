@@ -219,7 +219,7 @@ class LampiApp(App):
                 lambda dt: self._update_leds(), MQTT_PUBLISH_THROTTLE_SECS)
     
     def submit_partner_puzzle(self):
-        payload = {'h': self.hue, 's': self.saturation, 'b': self.brightness}
+        payload = {'h': self.hue, 's': 1.0, 'b': 1.0}
         topic = f"game/{get_device_id()}/puzzleState/sent"
         self.mqtt.publish(topic, json.dumps(payload), qos=1)
 
