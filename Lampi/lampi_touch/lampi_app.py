@@ -425,6 +425,7 @@ class LampiApp(App):
         try:
             print(f"receive_game_started called with payload: {message.payload}")
             Clock.schedule_once(lambda dt: self.start_game(), 0.01)
+            self.mqtt.publish("game1/started", "started")
         except Exception as e:
             print(f"ERROR in receive_game_started: {e}")
 
