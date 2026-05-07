@@ -306,6 +306,7 @@ class LampiApp(App):
         result = self.puzzle_handler.solve_wire_puzzle(position)
         if result == 1:
             self.update_puzzle_state(0, 'S', False)  # Temporarily disable publish to avoid crash
+            self.go_to_success_screen()
         else:
             self.update_puzzle_state(0, 'F', False)
         # Update the UI to show the cut wire
@@ -314,6 +315,7 @@ class LampiApp(App):
             wire_button = screen.ids[f'wire_{position}']
             wire_button.background_normal = wire_button.background_down
         time.sleep(1)
+
 
 
 
