@@ -17,6 +17,7 @@ class LosingSequence:
         self.client.publish("lamp/set_config", json.dumps(msg), qos=1)
 
     def run(self, duration=2.0):
+        self.client.reconnect()
         end_time = time.time() + duration
         try:
             while time.time() < end_time:
