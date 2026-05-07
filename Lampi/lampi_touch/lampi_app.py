@@ -269,12 +269,12 @@ class LampiApp(App):
         #self.mqtt.subscribe(TOPIC_GAME_STARTED.replace("{{device_id}}", get_device_id()), qos=1)
         self.mqtt.message_callback_add("game1/state", self.receive_game_state)
         self.mqtt.message_callback_add("game1/started", self.receive_game_started)
-        self.mqtt.message_callback_add("game1/state/explosion", self.lose_sequence.run())
+        self.mqtt.message_callback_add("game1/state/explosion", self.secondary_explode)
         self.mqtt.subscribe("game1/lamp1/#")
         self.mqtt.subscribe("game1/started", qos=1)
         self.mqtt.subscribe("game1/lamp1/winGame")
         self.mqtt.subscribe("game1/state/explosion")
-        self.mqtt.message_callback_add("game1/lamp1/winGame", self.run_win_sequence),
+        self.mqtt.message_callback_add("game1/lamp1/winGame", self.run_win_sequence)
 
     def _poll_associated(self, dt):
         # this polling loop allows us to synchronize changes from the
@@ -327,6 +327,9 @@ class LampiApp(App):
     # Resets puzzle state at a point to not solved
     def reset_puzzle_state(self, puzzle_index: int):
         self.update_puzzle_state(puzzle_index, 'N', True)
+
+    def secondary_explode(self):
+        self.lose_sequence.run()
 
     def run_win_sequence(self):
         self.win_sequence.run()
