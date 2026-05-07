@@ -8,7 +8,7 @@ from paho.mqtt.properties import Properties
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from lampi_web.models import Lampi
+from KTALDE_web.models import Lampi
 
 
 MQTT_BROKER_RE_PATTERN: str = (r'\$sys\/broker\/connection\/'
