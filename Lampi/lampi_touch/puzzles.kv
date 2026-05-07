@@ -86,7 +86,7 @@
             on_press: app.go_to_p6wires()
 
         Button:
-            text: "Puzzle 2"
+            text: "LED Puzzle"
             font_size: "14sp"
             background_color: (0,0,0,0)
             size_hint_x: 0.30
@@ -109,6 +109,7 @@
                     pos: self.x + 3, self.y + 3
                     size: self.width - 6, self.height - 6
                     radius: [0]
+                on_press: app.go_to_led()
         
 
         Button:
