@@ -13,18 +13,20 @@
         # red wire
         Button:
             id: wire_0
-            background_normal: 'images/p1_wire_images/p1_red_straight.png'
+            background_normal: 'images/p1_wire_images/p1rsc.png'
             background_down: 'images/p1_wire_images/p1rsc.png'
             size_hint: 0.15, 1.2
             pos_hint: {'center_x': 0.14, 'center_y': 0.5}
             allow_stretch: True
             keep_ratio: True
-            on_press: app.on_cut_wire(0)
+            on_press: 
+                app.on_cut_wire(0)
+                background_normal = background_down
 
         # blue wire
         Button:
             id: wire_1
-            background_normal: 'images/p1_wire_images/p1_blue_straight.png'
+            background_normal: 'images/p1_wire_images/p1bs.png'
             background_down: 'images/p1_wire_images/p1bsc.png'
             size_hint: 0.17, 1.2
             # 0.2 + 0.15 = 0.35
@@ -36,7 +38,7 @@
         # green wire
         Button:
             id: wire_2
-            background_normal: 'images/p1_wire_images/p1_green_straight.png'
+            background_normal: 'images/p1_wire_images/p1gs.png'
             background_down: 'images/p1_wire_images/p1gsc.png'
             size_hint: 0.18, 1.2
             # 0.4 + 0.15 = 0.45
@@ -48,7 +50,7 @@
         # orange wire
         Button:
             id: wire_3
-            background_normal: 'images/p1_wire_images/p1_orange_straight.png'
+            background_normal: 'images/p1_wire_images/p1os.png'
             background_down: 'images/p1_wire_images/p1osc.png'
             size_hint: 0.15, 1.2
             # 0.5 + 0.15 = 0.65

@@ -14,6 +14,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 import paho.mqtt.client as mqtt
 from paho.mqtt.client import Client, CallbackAPIVersion
+import time
 
 from lamp_common import *
 import lampi_touch.lampi_util
@@ -25,8 +26,11 @@ MQTT_CLIENT_ID = "lamp_ui"
 # the lamp_service with messages during rapid slider movement.
 MQTT_PUBLISH_THROTTLE_SECS = 0.05
 
+TOPIC_OUTGOING_PUZZLE_STATE_1 = "game/device1/puzzleState/received"
 
 MQTT_CLIENT_ID = "lamp_ui"
+
+DEVICE_NUMBER = 1
 
 # TODO: New python file imported and called for specific puzzle handling :)
 
@@ -163,6 +167,7 @@ class LampiApp(App):
         self.associated_status_popup = self._build_associated_status_popup()
         self.associated_status_popup.bind(on_open=self.update_popup_associated)
         Clock.schedule_interval(self._poll_associated, 0.1)
+        
     # =======================
     # where the association code pops up
     def _build_associated_status_popup(self):
@@ -251,11 +256,11 @@ class LampiApp(App):
 
     
     def initialize_states(self):
-        self.current_puzzle_state = ['N']
+        self.current_puzzle_state = ['N', 'N']
 
+    #THIS IS DIFFERENT between each lampi...
     def publish_puzzle_state(self):
-        TOPIC_OUTGOING_PUZZLE_STATE.replace("{{device_id}}", get_device_id())
-        self.mqtt.publish(TOPIC_OUTGOING_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), self.current_puzzle_state, qos=1)
+        self.mqtt.publish(TOPIC_OUTGOING_PUZZLE_STATE_1, self.current_puzzle_state, qos=1)
     
     def publish_partner_puzzle_state(self, information):
         TOPIC_PARTNER_PUZZLE_STATE.replace("{{device_id}}", get_device_id())
@@ -279,30 +284,31 @@ class LampiApp(App):
 
 
     def on_cut_wire(self, position: int) -> None:
-        if not hasattr(self, 'puzzle_handler') or 1 not in self.puzzle_handler.puzzle_layouts:
+        if not hasattr(self, 'puzzle_handler'):
             return
+        time.sleep(2)
         result = self.puzzle_handler.solve_wire_puzzle(position)
         if result == 1:
             self.update_puzzle_state(0, 'S', True)
         else:
             self.update_puzzle_state(0, 'F', True)
 
-    def on_led_puzzle_solve(self, color: float, saturation: float, brightness: float):
+    def on_led_puzzle_solve(self, sliderValue: float):
         ##this would be the single player puzzle solve...
-        if not hasattr(self, 'puzzle_handler') or 2 not in self.puzzle_handler.puzzle_layouts:
+        if not hasattr(self, 'puzzle_handler'):
             return
-        result = self.puzzle_handler.solve_led_puzzle(color, saturation, brightness)
+        result = self.puzzle_handler.solve_led_puzzle(sliderValue, DEVICE_NUMBER)
         if result == 1:
             self.update_puzzle_state(0, 'S', True)
         else:
             self.update_puzzle_state(0, 'F', True)
 
-    def on_partner_led_solve(self, color: float, saturation: float, brightness: float):
-        #publish state onto partner receiving end
-        if not hasattr(self, 'puzzle_handler') or 2 not in self.puzzle_handler.puzzle_layouts:
-            return
-        result = self.puzzle_handler.solve_led_puzzle(color, saturation, brightness)
-        return
+    # def on_partner_led_solve(self, color: float, saturation: float, brightness: float):
+    #     #publish state onto partner receiving end
+    #     if not hasattr(self, 'puzzle_handler') or 2 not in self.puzzle_handler.puzzle_layouts:
+    #         return
+    #     result = self.puzzle_handler.solve_led_puzzle(color, saturation, brightness)
+    #     return
 
 
     def _process_incoming_puzzle_state(self, payload: str) -> None:
@@ -347,13 +353,13 @@ class LampiApp(App):
         self.puzzle_handler.wire_puzzle_config()
 
     
-    def update_popup_associated(self, instance):
-        code = self.association_code[0:6]
-        instance.content.text = ("Please use the\n"
-                                 "following code\n"
-                                 "to associate\n"
-                                 "your device\n"
-                                 f"on the Web\n{code}")
+    # def update_popup_associated(self, instance):
+    #     code = self.association_code[0:6]
+    #     instance.content.text = ("Please use the\n"
+    #                              "following code\n"
+    #                              "to associate\n"
+    #                              "your device\n"
+    #                              f"on the Web\n{code}")
 
     def receive_bridge_connection_status(self, client: Client, userdata: Any,
                                          message: mqtt.MQTTMessage) -> None:

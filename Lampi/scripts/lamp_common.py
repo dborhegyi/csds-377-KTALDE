@@ -6,7 +6,7 @@ DEVICE_ID_FILENAME = '/sys/class/net/eth0/address'
 TOPIC_SET_LAMP_CONFIG: str = "lamp/set_config"
 TOPIC_LAMP_CHANGE_NOTIFICATION: str = "lamp/changed"
 TOPIC_LAMP_ASSOCIATED: str = "lamp/associated"
-TOPIC_OUTGOING_PUZZLE_STATE: str = "game/{{device_id}}/puzzleState/received"
+TOPIC_OUTGOING_PUZZLE_STATE: str = "game/device1/puzzleState/received"
 TOPIC_INCOMING_PUZZLE_STATE: str = "game/{{device_id}}/puzzleState/sent"
 
 def get_device_id() -> str:
