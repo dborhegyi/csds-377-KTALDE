@@ -129,7 +129,7 @@
       <input type="hidden" name="player_slot" value="1">
       <div class="association-row">
         <label for="code1">Player 1</label>
-        <h3> Bomb ID: ksjkfdbvkb </h3>
+        <p> Bomb ID: ksjkfdbvkb </p>
       </div>
       {% if form1.errors %}
         <div class="form-error">{{ form1.association_code.errors }}</div>
@@ -140,7 +140,8 @@
       {% csrf_token %}
       <input type="hidden" name="player_slot" value="2">
       <div class="association-row">
-        <h3> Bomb ID: kjadhfvbjkhfd bju </h3>
+        <label for="code1">Player 1</label>
+        <p> Bomb ID: kjadhfvbjkhfd bju </p>
       </div>
       {% if form2.errors %}
         <div class="form-error">{{ form2.association_code.errors }}</div>
