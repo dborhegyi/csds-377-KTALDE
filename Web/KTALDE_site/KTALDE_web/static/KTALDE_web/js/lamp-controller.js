@@ -67,7 +67,7 @@ function lampController() {
 
     init(){
       this.connect();
-    }
+    },
 
     get colorBoxColor() {
       return hsbToHex(this.hue * 360, this.saturation, 1.0);
