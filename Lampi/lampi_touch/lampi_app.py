@@ -16,7 +16,7 @@ import paho.mqtt.client as mqtt
 from paho.mqtt.client import Client, CallbackAPIVersion
 import time
 
-import lightseq
+import lampi_touch.lightseq
 
 from lamp_common import *
 import lampi_touch.lampi_util
@@ -176,8 +176,8 @@ class LampiApp(App):
         #self.association_code: Optional[str] = None
         self.initialize_states()
         self.puzzle_handler = lampi_touch.puzzles.Puzzle_Handler()
-        self.win_sequence = lightseq.winseq.WinningSequence()
-        self.lose_sequence = lightseq.loseseq.LosingSequence()
+        self.win_sequence = lampi_touch.lightseq.winseq.WinningSequence()
+        self.lose_sequence = lampi_touch.lightseq.loseseq.LosingSequence()
         self.mqtt: Client = Client(
             callback_api_version=CallbackAPIVersion.VERSION2,
             client_id=MQTT_CLIENT_ID
