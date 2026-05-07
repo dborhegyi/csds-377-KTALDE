@@ -311,7 +311,7 @@ class LampiApp(App):
             self.current_puzzle_state[0] = 'S'
             Clock.schedule_once(lambda dt: self.go_to_success_screen(), 0.5)
         else:
-            self.update_puzzle_state(0, 'F', False)
+            self.current_puzzle_state[0] = 'F'
         # Update the UI to show the cut wire
         
 
