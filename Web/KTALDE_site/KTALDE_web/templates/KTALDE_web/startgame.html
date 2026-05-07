@@ -14,7 +14,7 @@
           lampChanged: "devices/{{ device.device_id }}/lamp/changed",
           lampServiceState: "devices/{{ device.device_id }}/lamp/connection/lamp_service/state",
           lampUIState: "devices/{{ device.device_id }}/lamp/connection/lamp_ui/state",
-          gameStarted: "game/started",
+          gameStarted: "devices/{{ device.device_id }}/game/started",
           pubAllPuzzleState: "game/+/puzzleState/sent",
           pubOnePuzzleState: "game/{{ device.device_id }}/puzzleState/sent",
           subPuzzleState: "game/{{ device.device_id }}/puzzleState/received"
@@ -129,7 +129,7 @@
       <input type="hidden" name="player_slot" value="1">
       <div class="association-row">
         <label for="code1">Player 1</label>
-        <p> Bomb ID: ksjkfdbvkb </p>
+        <p> Bomb ID: b827eb41788e </p>
       </div>
       {% if form1.errors %}
         <div class="form-error">{{ form1.association_code.errors }}</div>
@@ -140,8 +140,8 @@
       {% csrf_token %}
       <input type="hidden" name="player_slot" value="2">
       <div class="association-row">
-        <label for="code1">Player 1</label>
-        <p> Bomb ID: kjadhfvbjkhfd bju </p>
+        <label for="code1">Player 2</label>
+        <p> Bomb ID: ZIJIN CODE </p>
       </div>
       {% if form2.errors %}
         <div class="form-error">{{ form2.association_code.errors }}</div>
@@ -159,10 +159,12 @@
 
     <!-- start button only begins when both players are added -->
     <div class="start-button-row">
-      <a href="{% url 'ingame' %}" class="start-link">START</a>
+      <a href="{% url 'ingame' %}" class="start-link" onclick="startGame()">START</a>
+      <script src="lamp-controller.js"></script>
     </div>
   </div>
 </div>
+
 
 <script>
   document.querySelectorAll('.level-option').forEach(button => {

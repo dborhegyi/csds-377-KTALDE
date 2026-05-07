@@ -114,6 +114,12 @@ function lampController() {
       this.client.publish(CONFIG.topics.setConfig, JSON.stringify(config), { qos: 1 });
     },
 
+    //GOOD, REAL TOPIC!!!
+    startGame() {
+      if (!this.client || !this.mqttConnected) return;
+      this.client.publish("devices/+/game/started","started", { qos: 1})
+    }
+
     submitPuzzle() {
       if (!this.client || !this.mqttConnected) return;
       const payload = { h: this.hue, s: this.saturation, b: this.brightness };
@@ -155,6 +161,13 @@ function lampController() {
             console.error('Failed to subscribe to lamp_ui state:', err);
           }
         });
+
+        this.client.subscribe("game/device_1/", (err) => {
+          if (err) {
+            console.error('Failed to subscribe to lamp_ui state:', err);
+          }
+        });
+
       });
 
       this.client.on('message', (topic, payload) => {
