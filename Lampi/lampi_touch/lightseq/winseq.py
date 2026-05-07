@@ -1,36 +1,32 @@
-import pigpio
+import paho.mqtt.client as mqtt
 import time
-
-# this is the winning sequence that happens if you WIN the game
-# by successfully the solving all of the puzzles in time
+import json
 
 class WinningSequence:
     def __init__(self):
-        self.pi1 = pigpio.pi()
-        self.blue = 13
-        self.red = 19
-        self.green = 26
+        self.client = mqtt.Client()
+        self.client.connect("localhost", 1883)
+
+    def _set_color(self, h, s, b, on=True):
+        msg = {
+            'color': {'h': h, 's': s},
+            'brightness': b,
+            'on': on,
+            'client': 'winning_sequence'
+        }
+        self.client.publish("lamp/set_config", json.dumps(msg), qos=1)
 
     def run(self):
         try:
-            # run forever when connected
             while True:
-                # Turn off all LEDs
-                self.pi1.write(self.blue, 0)
-                self.pi1.write(self.red, 0)
-                self.pi1.write(self.green,0)
-
-            # Delay 1 second
-                self.time.sleep(0.25)
-    
-                self.pi1.write(self.green,1)
-                self.time.sleep(0.5)
+                self._set_color(0, 0, 0, on=False)
+                time.sleep(0.25)
+                # Flash green (hue ~0.33)
+                self._set_color(0.33, 1.0, 1.0, on=True)
+                time.sleep(0.5)
         except KeyboardInterrupt:
             self.stop()
 
     def stop(self):
-        # Turn off all LEDs before exiting
-        self.pi1.write(self.blue, 0)
-        self.pi1.write(self.red, 0)
-        self.pi1.write(self.green,0)
-        self.pi1.stop()
+        self._set_color(0, 0, 0, on=False)
+        self.client.disconnect()
