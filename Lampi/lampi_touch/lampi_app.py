@@ -52,6 +52,9 @@ class WaitingHostScreen(Screen):
 class PuzzlesScreen(Screen):
     pass
 
+class SolvedScreen(Screen):
+    pass
+
 class P1WiresScreen(Screen):
     def on_enter(self):
         app = App.get_running_app()
@@ -82,6 +85,7 @@ class P6WiresScreen(Screen):
 class LampiApp(App):
     _updated: bool = False
     _updating_ui: bool = False
+    _color_value = NumericProperty()
     _hue = NumericProperty()
     _saturation = NumericProperty()
     _brightness = NumericProperty()
@@ -106,6 +110,12 @@ class LampiApp(App):
 
     def go_to_puzzles(self):
         self.root.current = 'puzzles'
+    
+    def go_to_success_screen(self):
+        self.root.current = 'solved'
+        #they get two seconds to look at the success screen lol!
+        time.sleep(2)
+        self.go_to_puzzles()
 
     # all the puzzles
     def go_to_p1wires(self):
@@ -136,11 +146,18 @@ class LampiApp(App):
     def _set_brightness(self, value: float) -> None:
         self._brightness = value
 
+    def _get_color_value(self) -> float:
+        return self._color_value
+    
+    def _set_color_value(self, value:float) -> None:
+        self._color_value = value
+
     hue = AliasProperty(_get_hue, _set_hue, bind=['_hue'])
     saturation = AliasProperty(_get_saturation, _set_saturation,
                                bind=['_saturation'])
     brightness = AliasProperty(_get_brightness, _set_brightness,
                                bind=['_brightness'])
+    color_value = AliasProperty(_get_color_value,_set_color_value, bind=['_color_value'])
     gpio17_pressed = BooleanProperty(False)
     device_associated = BooleanProperty(True)
 
@@ -226,6 +243,7 @@ class LampiApp(App):
         self.mqtt.subscribe(TOPIC_INCOMING_PUZZLE_STATE.replace("{{device_id}}", get_device_id()), qos=1)
         self.mqtt.message_callback_add(TOPIC_GAME_STARTED.replace("{{device_id}}", get_device_id()), self.receive_game_started)
         #self.mqtt.subscribe(TOPIC_GAME_STARTED.replace("{{device_id}}", get_device_id()), qos=1)
+        self.mqtt.message_callback_add("game/state", self.receive_game_state)
         self.mqtt.message_callback_add("gameStarted", self.receive_game_started)
         self.mqtt.subscribe("gameStarted", qos=1)
 
@@ -295,6 +313,9 @@ class LampiApp(App):
         if hasattr(screen, 'ids') and f'wire_{position}' in screen.ids:
             wire_button = screen.ids[f'wire_{position}']
             wire_button.background_normal = wire_button.background_down
+        time.sleep(1)
+
+
 
     def on_led_puzzle_solve(self, sliderValue: float):
         ##this would be the single player puzzle solve...
@@ -364,6 +385,18 @@ class LampiApp(App):
     #                              "to associate\n"
     #                              "your device\n"
     #                              f"on the Web\n{code}")
+
+    def explode():
+        #run through explosion sequence.
+        pass
+
+    def receive_game_state(self, client: Client, userdata: Any,
+                           message: mqtt.MQTTMessage):
+        if(message.payload == 1):
+            #1 = EXPLODED
+             explode()
+             
+        
 
     def receive_bridge_connection_status(self, client: Client, userdata: Any,
                                          message: mqtt.MQTTMessage) -> None:
