@@ -272,6 +272,8 @@ class LampiApp(App):
         self.mqtt.subscribe("game1/lamp1/#"),
         self.mqtt.subscribe("game1/started", qos=1),
         self.mqtt.subscribe("game1/lamp1/winGame"),
+        self.mqtt.subscribe("game1/state/explosion")
+        self.mqtt.message_callback_add("game1/state/explosion", self.lose_sequence.run())
         self.mqtt.message_callback_add("game1/lamp1/winGame", self.run_win_sequence),
 
     def _poll_associated(self, dt):

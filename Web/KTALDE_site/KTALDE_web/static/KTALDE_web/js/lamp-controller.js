@@ -145,6 +145,7 @@ function lampController() {
       this.client.publish("game1/state", "win")
     },
 
+
     checkSolved(){
       if(this.hasReceivedDevice1Solve && this.hasReceivedDevice2Solve){
         this.sendWinStatement()
@@ -267,6 +268,7 @@ function lampController() {
        }
 
       if (topic === "game1/state/explode"){
+        this.mqtt.publish("game1/state/explosion")
         window.location.href = "http://ec2-32-194-170-233.compute-1.amazonaws.com:8000/gameover";
         return;
       }
