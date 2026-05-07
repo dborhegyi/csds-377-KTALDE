@@ -330,6 +330,7 @@ class LampiApp(App):
         self.update_puzzle_state(puzzle_index, 'N', True)
 
     def secondary_explode(self):
+        self.root.current = "gameOver"
         self.lose_sequence.run()
 
     def run_win_sequence(self):
