@@ -16,21 +16,21 @@ class WinningSequence:
             # run forever when connected
             while True:
                 # Turn off all LEDs
-                self.pi1.write(blue, 0)
-                self.pi1.write(red, 0)
-                self.pi1.write(green,0)
+                self.pi1.write(self.blue, 0)
+                self.pi1.write(self.red, 0)
+                self.pi1.write(self.green,0)
 
             # Delay 1 second
                 self.time.sleep(0.25)
     
-                self.pi1.write(green,1)
+                self.pi1.write(self.green,1)
                 self.time.sleep(0.5)
         except KeyboardInterrupt:
             self.stop()
 
     def stop(self):
         # Turn off all LEDs before exiting
-        self.pi1.write(blue, 0)
-        self.pi1.write(red, 0)
-        self.pi1.write(green,0)
+        self.pi1.write(self.blue, 0)
+        self.pi1.write(self.red, 0)
+        self.pi1.write(self.green,0)
         self.pi1.stop()
